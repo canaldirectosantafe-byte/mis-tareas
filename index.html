@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0062)file:///Users/davidfernandezsuarez/Downloads/task-manager.html -->
+<!-- saved from url=(0064)file:///Users/davidfernandezsuarez/Downloads/task-manager_1.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,7 +133,7 @@ h1 { color: #fff; font-size: 22px; font-weight: 700; }
           </div>
           <div class="header-actions">
             <span class="status-ok">✅ Supabase</span>
-            <button class="btn-config " onclick="openConfig()">
+            <button class="btn-config " data-action="openconfig">
               ⚙️ Configurar
             </button>
             
@@ -142,89 +142,83 @@ h1 { color: #fff; font-size: 22px; font-weight: 700; }
 
         <!-- View nav -->
         <div class="nav">
-          <button class="nav-tab active" style="color:#F6AD55;border-bottom-color:#F6AD55" onclick="setView(&#39;dashboard&#39;)">
+          <button class="nav-tab " style="" data-view="dashboard">
             📊 Dashboard 
           </button>
-          <button class="nav-tab " style="" onclick="setView(&#39;tasks&#39;)">
+          <button class="nav-tab active" style="color:#6B46C1;border-bottom-color:#6B46C1" data-view="tasks">
             📋 Tareas
           </button>
         </div>
 
+        
+        <!-- Project tabs -->
+        <div class="tabs" style="margin-top:6px">
+          <button class="tab active" style="color:#6B46C1" data-project="1">
+              <span class="tab-dot"></span>ThinkIN
+              <span class="tab-count" style="background:#6B46C1">1</span>
+              <span style="font-size:12px;opacity:0.6" data-editproj="1">✏️</span>
+            </button><button class="tab " style="color:rgba(255,255,255,0.55)" data-project="2">
+              <span class="tab-dot"></span>Roiback
+              
+              
+            </button><button class="tab " style="color:rgba(255,255,255,0.55)" data-project="3">
+              <span class="tab-dot"></span>Programa secretarias
+              
+              
+            </button>
+          <button class="tab-add" data-action="newproj">+</button>
+        </div>
         
       </div>
     </div>
 
     <div class="body">
       
-    <div class="dash-grid">
-      
-        <div class="stat-card" style="background:#F5F3FF;border-color:#DDD6FE">
-          <div class="stat-num" style="color:#6B46C1">1</div>
-          <div class="stat-label" style="color:#6B46C1">Pendientes</div>
-        </div>
-      
-        <div class="stat-card" style="background:#FFF5F5;border-color:#FEB2B2">
-          <div class="stat-num" style="color:#E53E3E">0</div>
-          <div class="stat-label" style="color:#E53E3E">Vencidas</div>
-        </div>
-      
-        <div class="stat-card" style="background:#F0FFF4;border-color:#9AE6B4">
-          <div class="stat-num" style="color:#276749">0</div>
-          <div class="stat-label" style="color:#276749">Completadas</div>
-        </div>
-      
-    </div>
+    
+    
 
-    <div class="proj-summary"><div class="proj-card" style="border-color:#6B46C122">
-      <div class="proj-color-bar" style="background:#6B46C1"></div>
-      <div class="proj-info">
-        <div class="proj-name">ThinkIN</div>
-        <div class="proj-counts">
-          1 pendientes · 0 hechas
+    
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="filter-btn" style="background:#6B46C1;border-color:#6B46C1;color:#fff" data-filter="pending">
+            Pendientes (1)
+          </button>
+          <button class="filter-btn " style="" data-filter="done">
+            Hechas (0)
+          </button>
         </div>
+        <button class="btn-danger" data-deleteproj="1">🗑 Eliminar</button>
       </div>
-    </div><div class="proj-card" style="border-color:#2B6CB022">
-      <div class="proj-color-bar" style="background:#2B6CB0"></div>
-      <div class="proj-info">
-        <div class="proj-name">Roiback</div>
-        <div class="proj-counts">
-          0 pendientes · 0 hechas
-        </div>
-      </div>
-    </div><div class="proj-card" style="border-color:#27674922">
-      <div class="proj-color-bar" style="background:#276749"></div>
-      <div class="proj-info">
-        <div class="proj-name">Programa secretarias</div>
-        <div class="proj-counts">
-          0 pendientes · 0 hechas
-        </div>
-      </div>
-    </div></div>
+    
 
     
 
-    <div class="dash-section">
-      <div class="dash-section-title" style="color:#DD6B20">
-        <span style="background:#DD6B20"></span> 📅 Próximas con fecha límite
-      </div>
-      <div class="dash-task">
-      <div class="dash-task-left">
-        <div class="dash-task-name">Seguimiento semanal</div>
-        <div class="dash-task-meta">ThinkIN · Revisión de reservas</div>
-      </div>
-      <div class="dash-task-right">
-        <span class="dash-badge" style="background:#FFFFF0;color:#B7791F;border-color:#FAF089">🟡 Media</span>
-        <span class="dash-badge" style="background:#F7FAFC;color:#718096;border-color:#E2E8F0">📅 15/05/2026</span>
+    <div class="task-card " style="border-left:4px solid #B7791F">
+    <button class="task-checkbox " style="border-color:#B7791F" data-toggledone="1"></button>
+    <div class="task-body">
+      <div class="task-title ">Seguimiento semanal</div>
+      <div class="task-notes">Revisión de reservas</div>
+      <div class="task-meta">
+        <div class="priority-wrapper">
+          <button class="priority-badge" style="background:#FFFFF0;color:#B7791F;border-color:#FAF089" data-pdd="1">🟡 Media ▾</button>
+          <div class="priority-dropdown" id="pdd-1">
+            <button class="priority-option" style="background:transparent;color:#E53E3E" data-setpriority="urgent" data-taskid="1">🔴 Urgente</button><button class="priority-option" style="background:transparent;color:#DD6B20" data-setpriority="high" data-taskid="1">🟠 Alta</button><button class="priority-option" style="background:#FFFFF0;color:#B7791F" data-setpriority="medium" data-taskid="1">🟡 Media</button><button class="priority-option" style="background:transparent;color:#276749" data-setpriority="low" data-taskid="1">🟢 Baja</button>
+          </div>
+        </div>
+        <span class="deadline-badge" style="background:#F7FAFC;color:#718096;border-color:#E2E8F0">📅 En 9 días</span>
       </div>
     </div>
+    <div class="task-actions">
+      <button class="btn-icon" data-edittask="1">✏️</button>
+      <button class="btn-delete" data-deletetask="1">×</button>
     </div>
+  </div>
 
-    <div class="dash-section">
-      <div class="dash-section-title" style="color:#276749">
-        <span style="background:#276749"></span> ✅ Últimas completadas
-      </div>
-      <div class="dash-empty">Ninguna tarea completada aún</div>
-    </div>
+    
+      <button class="btn-add-task" style="background:#6B46C1;box-shadow:0 4px 16px #6B46C155" data-action="addtask">
+        + Añadir tarea a ThinkIN
+      </button>
+    
   
     </div>
   </div>
@@ -420,7 +414,7 @@ function render() {
           </div>
           <div class="header-actions">
             <span class="status-ok">✅ Supabase</span>
-            <button class="btn-config ${tgOk?"connected":""}" onclick="openConfig()">
+            <button class="btn-config ${tgOk?"connected":""}" data-action="openconfig">
               ${tgOk?"✈️ Telegram ✓":"⚙️ Configurar"}
             </button>
             ${state.notifications.length>0?`<div class="notif-badge">🔔 ${state.notifications.length}</div>`:""}
@@ -431,12 +425,12 @@ function render() {
         <div class="nav">
           <button class="nav-tab ${view==="dashboard"?"active":""}"
             style="${view==="dashboard"?"color:#F6AD55;border-bottom-color:#F6AD55":""}"
-            onclick="setView('dashboard')">
+            data-view="dashboard">
             📊 Dashboard ${totalOverdue>0?`<span style="background:#E53E3E;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px">${totalOverdue}</span>`:""}
           </button>
           <button class="nav-tab ${view==="tasks"?"active":""}"
             style="${view==="tasks"?"color:#6B46C1;border-bottom-color:#6B46C1":""}"
-            onclick="setView('tasks')">
+            data-view="tasks">
             📋 Tareas
           </button>
         </div>
@@ -446,13 +440,13 @@ function render() {
         <div class="tabs" style="margin-top:6px">
           ${projects.map(p=>{
             const cnt=pending(p.id),urg=urgent(p.id),active=p.id===activeProject;
-            return `<button class="tab ${active?"active":""}" style="color:${active?p.color:"rgba(255,255,255,0.55)"}" onclick="setProject(${p.id})">
+            return `<button class="tab ${active?"active":""}" style="color:${active?p.color:"rgba(255,255,255,0.55)"}" data-project="${p.id}">
               <span class="tab-dot"></span>${p.name}
               ${cnt>0?`<span class="tab-count" style="background:${urg>0?"#E53E3E":p.color}">${cnt}</span>`:""}
-              ${active?`<span style="font-size:12px;opacity:0.6" onclick="event.stopPropagation();openEditProj(${p.id})">✏️</span>`:""}
+              ${active?`<span style="font-size:12px;opacity:0.6" data-editproj="${p.id}">✏️</span>`:""}
             </button>`;
           }).join("")}
-          <button class="tab-add" onclick="toggleNewProj()">+</button>
+          <button class="tab-add" data-action="newproj">+</button>
         </div>
         ` : ""}
       </div>
@@ -473,14 +467,14 @@ function renderTasks(ap, projTasks, pending, doneC, projects) {
     ${ap ? `
       <div class="toolbar">
         <div class="toolbar-left">
-          <button class="filter-btn" style="${!showDone?`background:${ap.color};border-color:${ap.color};color:#fff`:""}" onclick="setShowDone(false)">
+          <button class="filter-btn" style="${!showDone?`background:${ap.color};border-color:${ap.color};color:#fff`:""}" data-filter="pending">
             Pendientes (${pending(ap.id)})
           </button>
-          <button class="filter-btn ${showDone?"active-done":""}" style="${showDone?"background:#48BB78;border-color:#48BB78;color:#fff":""}" onclick="setShowDone(true)">
+          <button class="filter-btn ${showDone?"active-done":""}" style="${showDone?"background:#48BB78;border-color:#48BB78;color:#fff":""}" data-filter="done">
             Hechas (${doneC(ap.id)})
           </button>
         </div>
-        ${projects.length>1?`<button class="btn-danger" onclick="deleteProject(${ap.id})">🗑 Eliminar</button>`:""}
+        ${projects.length>1?`<button class="btn-danger" data-deleteproj="${ap.id}">🗑 Eliminar</button>`:""}
       </div>
     ` : ""}
 
@@ -491,7 +485,7 @@ function renderTasks(ap, projTasks, pending, doneC, projects) {
     ${projTasks.map(t=>state.showEditTask===t.id?editTaskCard(t):taskCard(t)).join("")}
 
     ${!showDone?(state.showTaskForm?newTaskForm(ap):`
-      <button class="btn-add-task" style="background:${ap?.color||"#6B46C1"};box-shadow:0 4px 16px ${ap?.color||"#6B46C1"}55" onclick="openTaskForm()">
+      <button class="btn-add-task" style="background:${ap?.color||"#6B46C1"};box-shadow:0 4px 16px ${ap?.color||"#6B46C1"}55" data-action="addtask">
         + Añadir tarea a ${ap?.name||""}
       </button>
     `):""}
@@ -510,8 +504,8 @@ function configModal() {
       <input class="input" placeholder="123456789" value="${state.tgChatId}" oninput="state.tgChatId=this.value">
       <p style="font-size:11px;color:#A0AEC0;margin-bottom:18px">Obtén el token con @BotFather y el Chat ID con @userinfobot en Telegram.</p>
       <div class="btn-row">
-        <button class="btn-primary" style="background:#2D3748" onclick="saveTgConfig()">Guardar y probar</button>
-        <button class="btn-secondary" onclick="closeConfig()">Cancelar</button>
+        <button class="btn-primary" style="background:#2D3748" data-action="saveconfig">Guardar y probar</button>
+        <button class="btn-secondary" data-action="closeconfig">Cancelar</button>
       </div>
     </div>
   </div>`;
@@ -522,10 +516,10 @@ function editProjForm() {
   return `<div class="card" style="border-color:${editProj.color}">
     <div class="card-title">✏️ Editar proyecto</div>
     <input class="input" value="${editProj.name}" oninput="state.editProj.name=this.value" onkeydown="if(event.key==='Enter')saveEditProj()">
-    <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${editProj.color===c?" selected":""}" style="background:${c}" onclick="state.editProj.color='${c}';render()"></button>`).join("")}</div>
+    <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${editProj.color===c?" selected":""}" style="background:${c}" data-color="${c}" data-target="editproj"></button>`).join("")}</div>
     <div class="btn-row">
-      <button class="btn-primary" style="background:${editProj.color}" onclick="saveEditProj()">Guardar cambios</button>
-      <button class="btn-secondary" onclick="state.showEditProj=null;render()">Cancelar</button>
+      <button class="btn-primary" style="background:${editProj.color}" data-action="saveeditproj">Guardar cambios</button>
+      <button class="btn-secondary" data-action="canceleditproj">Cancelar</button>
     </div>
   </div>`;
 }
@@ -535,10 +529,10 @@ function newProjForm() {
   return `<div class="card">
     <div class="card-title">Nuevo proyecto</div>
     <input class="input" placeholder="Nombre del proyecto" value="${newProj.name}" oninput="state.newProj.name=this.value" onkeydown="if(event.key==='Enter')addProject()">
-    <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${newProj.color===c?" selected":""}" style="background:${c}" onclick="state.newProj.color='${c}';render()"></button>`).join("")}</div>
+    <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${newProj.color===c?" selected":""}" style="background:${c}" data-color="${c}" data-target="newproj"></button>`).join("")}</div>
     <div class="btn-row">
-      <button class="btn-primary" style="background:#2D3748" onclick="addProject()">Crear</button>
-      <button class="btn-secondary" onclick="state.showProjForm=false;render()">Cancelar</button>
+      <button class="btn-primary" style="background:#2D3748" data-action="addproject">Crear</button>
+      <button class="btn-secondary" data-action="cancelnewproj">Cancelar</button>
     </div>
   </div>`;
 }
@@ -547,23 +541,23 @@ function taskCard(t) {
   const pr=PRIORITIES.find(x=>x.id===t.priority);
   const dl=dlLabel(t.deadline);
   return `<div class="task-card ${t.done?"done":""}" style="border-left:4px solid ${t.done?"#CBD5E0":pr.color}">
-    <button class="task-checkbox ${t.done?"checked":""}" style="border-color:${t.done?"#48BB78":pr.color}" onclick="toggleDone(${t.id})">${t.done?"✓":""}</button>
+    <button class="task-checkbox ${t.done?"checked":""}" style="border-color:${t.done?"#48BB78":pr.color}" data-toggledone="${t.id}">${t.done?"✓":""}</button>
     <div class="task-body">
       <div class="task-title ${t.done?"done":""}">${t.title}</div>
       ${t.notes?`<div class="task-notes">${t.notes}</div>`:""}
       <div class="task-meta">
         ${!t.done?`<div class="priority-wrapper">
-          <button class="priority-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}" onclick="togglePDD(${t.id})">${pr.emoji} ${pr.label} ▾</button>
+          <button class="priority-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}" data-pdd="${t.id}">${pr.emoji} ${pr.label} ▾</button>
           <div class="priority-dropdown" id="pdd-${t.id}">
-            ${PRIORITIES.map(p=>`<button class="priority-option" style="background:${p.id===t.priority?p.bg:"transparent"};color:${p.color}" onclick="setPriority(${t.id},'${p.id}')">${p.emoji} ${p.label}</button>`).join("")}
+            ${PRIORITIES.map(p=>`<button class="priority-option" style="background:${p.id===t.priority?p.bg:"transparent"};color:${p.color}" data-setpriority="${p.id}" data-taskid="${t.id}">${p.emoji} ${p.label}</button>`).join("")}
           </div>
         </div>`:""}
         ${dl&&!t.done?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${dl.text}</span>`:""}
       </div>
     </div>
     <div class="task-actions">
-      ${!t.done?`<button class="btn-icon" onclick="openEditTask(${t.id})">✏️</button>`:""}
-      <button class="btn-delete" onclick="deleteTask(${t.id})">×</button>
+      ${!t.done?`<button class="btn-icon" data-edittask="${t.id}">✏️</button>`:""}
+      <button class="btn-delete" data-deletetask="${t.id}">×</button>
     </div>
   </div>`;
 }
@@ -577,12 +571,12 @@ function editTaskCard(t) {
     <label class="label">📅 Fecha límite</label>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
       <input type="date" class="input-sm" value="${editTask.deadline}" oninput="state.editTask.deadline=this.value">
-      ${editTask.deadline?`<button style="font-size:11px;color:#FC8181;background:none;border:1px solid #FED7D7;border-radius:6px;padding:4px 8px" onclick="state.editTask.deadline='';render()">Quitar fecha</button>`:""}
+      ${editTask.deadline?`<button style="font-size:11px;color:#FC8181;background:none;border:1px solid #FED7D7;border-radius:6px;padding:4px 8px" data-action="cleardeadline">Quitar fecha</button>`:""}
     </div>
-    <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${editTask.priority===p.id?p.color:p.border};background:${editTask.priority===p.id?p.bg:"transparent"};color:${p.color}" onclick="state.editTask.priority='${p.id}';render()">${p.emoji} ${p.label}</button>`).join("")}</div>
+    <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${editTask.priority===p.id?p.color:p.border};background:${editTask.priority===p.id?p.bg:"transparent"};color:${p.color}" data-formpriority="${p.id}" data-target="edittask">${p.emoji} ${p.label}</button>`).join("")}</div>
     <div class="btn-row">
-      <button class="btn-primary" style="background:${ap?.color||"#6B46C1"}" onclick="saveEditTask()">Guardar</button>
-      <button class="btn-secondary" onclick="state.showEditTask=null;render()">Cancelar</button>
+      <button class="btn-primary" style="background:${ap?.color||"#6B46C1"}" data-action="saveedittask">Guardar</button>
+      <button class="btn-secondary" data-action="canceledittask">Cancelar</button>
     </div>
   </div>`;
 }
@@ -595,10 +589,10 @@ function newTaskForm(ap) {
     <input class="input input-notes" placeholder="Notas (opcional)" value="${newTask.notes}" oninput="state.newTask.notes=this.value">
     <label class="label">📅 Fecha límite</label>
     <input type="date" class="input-sm" value="${newTask.deadline}" oninput="state.newTask.deadline=this.value" style="margin-bottom:12px">
-    <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${newTask.priority===p.id?p.color:p.border};background:${newTask.priority===p.id?p.bg:"transparent"};color:${p.color}" onclick="state.newTask.priority='${p.id}';render()">${p.emoji} ${p.label}</button>`).join("")}</div>
+    <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${newTask.priority===p.id?p.color:p.border};background:${newTask.priority===p.id?p.bg:"transparent"};color:${p.color}" data-formpriority="${p.id}" data-target="newtask">${p.emoji} ${p.label}</button>`).join("")}</div>
     <div class="btn-row">
-      <button class="btn-primary" style="background:${ap?.color||"#6B46C1"}" onclick="addTask()">Añadir tarea</button>
-      <button class="btn-secondary" onclick="state.showTaskForm=false;render()">Cancelar</button>
+      <button class="btn-primary" style="background:${ap?.color||"#6B46C1"}" data-action="addtaskconfirm">Añadir tarea</button>
+      <button class="btn-secondary" data-action="cancelnewtask">Cancelar</button>
     </div>
   </div>`;
 }
@@ -612,7 +606,7 @@ function renderToasts() {
         <div style="font-size:13px;color:#2D3748;font-weight:600;margin:3px 0 1px">${n.taskTitle}</div>
         <div style="font-size:11px;color:#718096">${n.project}</div>
       </div>
-      <button class="toast-close" onclick="dismissToast(${n.id})">×</button>
+      <button class="toast-close" data-dismisstoast="${n.id}">×</button>
     </div>
   `).join("");
 }
@@ -629,6 +623,101 @@ function dismissToast(id) { state.notifications=state.notifications.filter(n=>n.
 function togglePDD(id) { const el=document.getElementById(`pdd-${id}`); if(el) el.style.display=el.style.display==="none"||!el.style.display?"block":"none"; }
 function openEditProj(id) { const p=proj(id); state.showEditProj=id; state.editProj={name:p.name,color:p.color}; state.showProjForm=false; render(); }
 function openEditTask(id) { const t=state.tasks.find(x=>x.id===id); state.showEditTask=id; state.editTask={title:t.title,priority:t.priority,notes:t.notes||"",deadline:t.deadline||""}; render(); }
+
+// Event delegation — handles all clicks robustly after each render
+document.addEventListener("click", function(e) {
+  const t = e.target;
+
+  // View switch
+  const viewBtn = t.closest("[data-view]");
+  if (viewBtn) { setView(viewBtn.dataset.view); return; }
+
+  // Project tab
+  const projBtn = t.closest("[data-project]");
+  if (projBtn && !t.closest("[data-editproj]")) { setProject(Number(projBtn.dataset.project)); return; }
+
+  // Edit project (pencil on tab)
+  const editProjBtn = t.closest("[data-editproj]");
+  if (editProjBtn) { e.stopPropagation(); openEditProj(Number(editProjBtn.dataset.editproj)); return; }
+
+  // New project
+  if (t.closest("[data-action='newproj']")) { toggleNewProj(); return; }
+
+  // Filter buttons
+  if (t.closest("[data-filter='pending']")) { setShowDone(false); return; }
+  if (t.closest("[data-filter='done']"))    { setShowDone(true);  return; }
+
+  // Delete project
+  const delProj = t.closest("[data-deleteproj]");
+  if (delProj) { deleteProject(Number(delProj.dataset.deleteproj)); return; }
+
+  // Task form open
+  if (t.closest("[data-action='addtask']")) { openTaskForm(); return; }
+
+  // Toggle done
+  const togDone = t.closest("[data-toggledone]");
+  if (togDone) { toggleDone(Number(togDone.dataset.toggledone)); return; }
+
+  // Priority dropdown toggle
+  const pddToggle = t.closest("[data-pdd]");
+  if (pddToggle && !t.closest("[data-setpriority]")) { togglePDD(Number(pddToggle.dataset.pdd)); return; }
+
+  // Set priority
+  const setPri = t.closest("[data-setpriority]");
+  if (setPri) { setPriority(Number(setPri.dataset.taskid), setPri.dataset.setpriority); return; }
+
+  // Edit task
+  const editT = t.closest("[data-edittask]");
+  if (editT) { openEditTask(Number(editT.dataset.edittask)); return; }
+
+  // Delete task
+  const delT = t.closest("[data-deletetask]");
+  if (delT) { deleteTask(Number(delT.dataset.deletetask)); return; }
+
+  // Config
+  if (t.closest("[data-action='openconfig']")) { openConfig(); return; }
+  if (t.closest("[data-action='closeconfig']")) { closeConfig(); return; }
+  if (t.closest("[data-action='saveconfig']")) { saveTgConfig(); return; }
+
+  // Save/cancel edit proj
+  if (t.closest("[data-action='saveeditproj']")) { saveEditProj(); return; }
+  if (t.closest("[data-action='canceleditproj']")) { state.showEditProj=null; render(); return; }
+
+  // Add project
+  if (t.closest("[data-action='addproject']")) { addProject(); return; }
+  if (t.closest("[data-action='cancelnewproj']")) { state.showProjForm=false; render(); return; }
+
+  // Save/cancel edit task
+  if (t.closest("[data-action='saveedittask']")) { saveEditTask(); return; }
+  if (t.closest("[data-action='canceledittask']")) { state.showEditTask=null; render(); return; }
+  if (t.closest("[data-action='cleardeadline']")) { state.editTask.deadline=""; render(); return; }
+
+  // Add task
+  if (t.closest("[data-action='addtaskconfirm']")) { addTask(); return; }
+  if (t.closest("[data-action='cancelnewtask']")) { state.showTaskForm=false; render(); return; }
+
+  // Color pickers
+  const colorBtn = t.closest("[data-color]");
+  if (colorBtn) {
+    const target = colorBtn.dataset.target;
+    if (target === "editproj") { state.editProj.color = colorBtn.dataset.color; render(); }
+    if (target === "newproj")  { state.newProj.color  = colorBtn.dataset.color; render(); }
+    return;
+  }
+
+  // Priority in forms
+  const formPri = t.closest("[data-formpriority]");
+  if (formPri) {
+    const target = formPri.dataset.target;
+    if (target === "newtask")  { state.newTask.priority  = formPri.dataset.formpriority; render(); }
+    if (target === "edittask") { state.editTask.priority = formPri.dataset.formpriority; render(); }
+    return;
+  }
+
+  // Dismiss toast
+  const toastClose = t.closest("[data-dismisstoast]");
+  if (toastClose) { dismissToast(Number(toastClose.dataset.dismisstoast)); return; }
+});
 
 // ── DB actions ────────────────────────────────────────────────────────────────
 async function addProject() {
