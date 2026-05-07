@@ -165,7 +165,7 @@ let state = {
   projects:[], tasks:[], activeProject:null,
   view:"tasks", // "dashboard" | "tasks"
   showTaskForm:false, showProjForm:false, showEditProj:null,
-  showEditTask:null, showConfig:false, showDone:false,
+  showEditTask:null, showConfig:false, taskFilter:"pending",
   newTask:{ title:"", priority:"medium", notes:"", deadline:"" },
   newProj:{ name:"", color:PROJECT_COLORS[0] },
   editProj:{ name:"", color:PROJECT_COLORS[0] },
@@ -311,17 +311,23 @@ function renderDashboard() {
 
 // ── Main render ───────────────────────────────────────────────────────────────
 function render() {
-  const { projects, tasks, activeProject, showDone, view } = state;
+  const { projects, tasks, activeProject, taskFilter, view } = state;
   const ap = proj(activeProject);
   const projTasks = tasks
-    .filter(t=>t.project_id===activeProject&&(showDone?t.done:!t.done))
+    .filter(t => {
+      if (t.project_id !== activeProject) return false;
+      if (taskFilter === "done")    return t.done;
+      if (taskFilter === "overdue") return !t.done && t.deadline && daysUntil(t.deadline) < 0;
+      return !t.done && !(t.deadline && daysUntil(t.deadline) < 0);
+    })
     .sort((a,b)=>{
       if(a.done!==b.done) return a.done?1:-1;
       return (PRIORITIES.find(x=>x.id===a.priority)?.order||9)-(PRIORITIES.find(x=>x.id===b.priority)?.order||9);
     });
-  const pending = pid => tasks.filter(t=>t.project_id===pid&&!t.done).length;
-  const urgent  = pid => tasks.filter(t=>t.project_id===pid&&!t.done&&t.priority==="urgent").length;
-  const doneC   = pid => tasks.filter(t=>t.project_id===pid&&t.done).length;
+  const pending  = pid => tasks.filter(t=>t.project_id===pid&&!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length;
+  const overdue  = pid => tasks.filter(t=>t.project_id===pid&&!t.done&&t.deadline&&daysUntil(t.deadline)<0).length;
+  const urgent   = pid => tasks.filter(t=>t.project_id===pid&&!t.done&&t.priority==="urgent").length;
+  const doneC    = pid => tasks.filter(t=>t.project_id===pid&&t.done).length;
   const tgOk = state.tgToken&&state.tgChatId;
   const totalOverdue = tasks.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length;
 
@@ -382,7 +388,8 @@ function render() {
 }
 
 function renderTasks(ap, projTasks, pending, doneC, projects) {
-  const { showDone } = state;
+  const { taskFilter } = state;
+  const overdue = pid => state.tasks.filter(t=>t.project_id===pid&&!t.done&&t.deadline&&daysUntil(t.deadline)<0).length;
   return `
     ${state.showEditProj ? editProjForm() : ""}
     ${state.showProjForm ? newProjForm() : ""}
@@ -390,10 +397,13 @@ function renderTasks(ap, projTasks, pending, doneC, projects) {
     ${ap ? `
       <div class="toolbar">
         <div class="toolbar-left">
-          <button class="filter-btn" style="${!showDone?`background:${ap.color};border-color:${ap.color};color:#fff`:""}" data-filter="pending">
+          <button class="filter-btn" style="${taskFilter==='pending'?`background:${ap.color};border-color:${ap.color};color:#fff`:""}" data-filter="pending">
             Pendientes (${pending(ap.id)})
           </button>
-          <button class="filter-btn ${showDone?"active-done":""}" style="${showDone?"background:#48BB78;border-color:#48BB78;color:#fff":""}" data-filter="done">
+          <button class="filter-btn" style="${taskFilter==='overdue'?'background:#E53E3E;border-color:#E53E3E;color:#fff':''}" data-filter="overdue">
+            Vencidas (${overdue(ap.id)})
+          </button>
+          <button class="filter-btn" style="${taskFilter==='done'?'background:#48BB78;border-color:#48BB78;color:#fff':''}" data-filter="done">
             Hechas (${doneC(ap.id)})
           </button>
         </div>
@@ -402,12 +412,12 @@ function renderTasks(ap, projTasks, pending, doneC, projects) {
     ` : ""}
 
     ${projTasks.length===0&&!state.showTaskForm ? `
-      <div class="empty">${showDone?"Ninguna tarea completada aún.":"Sin tareas pendientes. 🎉"}<br><span style="font-size:30px">📋</span></div>
+      <div class="empty">${taskFilter==="done"?"Ninguna tarea completada aún.":taskFilter==="overdue"?"Sin tareas vencidas. 🎉":"Sin tareas pendientes. 🎉"}<br><span style="font-size:30px">📋</span></div>
     ` : ""}
 
     ${projTasks.map(t=>state.showEditTask===t.id?editTaskCard(t):taskCard(t)).join("")}
 
-    ${!showDone?(state.showTaskForm?newTaskForm(ap):`
+    ${taskFilter==="pending"?(state.showTaskForm?newTaskForm(ap):`
       <button class="btn-add-task" style="background:${ap?.color||"#6B46C1"};box-shadow:0 4px 16px ${ap?.color||"#6B46C1"}55" data-action="addtask">
         + Añadir tarea a ${ap?.name||""}
       </button>
@@ -536,9 +546,9 @@ function renderToasts() {
 
 // ── Event handlers ────────────────────────────────────────────────────────────
 function setView(v) { state.view=v; state.showTaskForm=false; state.showEditTask=null; render(); }
-function setProject(id) { state.activeProject=id; state.showDone=false; state.showTaskForm=false; state.showEditTask=null; render(); }
+function setProject(id) { state.activeProject=id; state.taskFilter="pending"; state.showTaskForm=false; state.showEditTask=null; render(); }
 function toggleNewProj() { state.showProjForm=!state.showProjForm; state.showEditProj=null; render(); }
-function setShowDone(v) { state.showDone=v; render(); }
+function setFilter(f) { state.taskFilter=f; render(); }
 function openTaskForm() { state.showTaskForm=true; state.newTask={title:"",priority:"medium",notes:"",deadline:""}; render(); }
 function openConfig() { state.showConfig=true; render(); }
 function closeConfig() { state.showConfig=false; render(); }
@@ -567,8 +577,9 @@ document.addEventListener("click", function(e) {
   if (t.closest("[data-action='newproj']")) { toggleNewProj(); return; }
 
   // Filter buttons
-  if (t.closest("[data-filter='pending']")) { setShowDone(false); return; }
-  if (t.closest("[data-filter='done']"))    { setShowDone(true);  return; }
+  if (t.closest("[data-filter='pending']")) { setFilter('pending'); return; }
+  if (t.closest("[data-filter='overdue']")) { setFilter('overdue'); return; }
+  if (t.closest("[data-filter='done']"))    { setFilter('done');    return; }
 
   // Delete project
   const delProj = t.closest("[data-deleteproj]");
