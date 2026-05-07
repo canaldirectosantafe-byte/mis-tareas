@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///Users/davidfernandezsuarez/Downloads/task-manager_1.html -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="es">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mis Tareas</title>
-<script src="./index_files/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Georgia, Palatino, serif; background: #F0F2F8; min-height: 100vh; }
@@ -121,107 +121,7 @@ h1 { color: #fff; font-size: 22px; font-weight: 700; }
 </style>
 </head>
 <body>
-<div id="app">
-    
-
-    <div class="header">
-      <div class="header-inner">
-        <div class="header-top">
-          <div>
-            <div class="header-label">Panel de trabajo</div>
-            <h1>Mis Proyectos</h1>
-          </div>
-          <div class="header-actions">
-            <span class="status-ok">✅ Supabase</span>
-            <button class="btn-config " data-action="openconfig">
-              ⚙️ Configurar
-            </button>
-            
-          </div>
-        </div>
-
-        <!-- View nav -->
-        <div class="nav">
-          <button class="nav-tab " style="" data-view="dashboard">
-            📊 Dashboard 
-          </button>
-          <button class="nav-tab active" style="color:#6B46C1;border-bottom-color:#6B46C1" data-view="tasks">
-            📋 Tareas
-          </button>
-        </div>
-
-        
-        <!-- Project tabs -->
-        <div class="tabs" style="margin-top:6px">
-          <button class="tab active" style="color:#6B46C1" data-project="1">
-              <span class="tab-dot"></span>ThinkIN
-              <span class="tab-count" style="background:#6B46C1">1</span>
-              <span style="font-size:12px;opacity:0.6" data-editproj="1">✏️</span>
-            </button><button class="tab " style="color:rgba(255,255,255,0.55)" data-project="2">
-              <span class="tab-dot"></span>Roiback
-              
-              
-            </button><button class="tab " style="color:rgba(255,255,255,0.55)" data-project="3">
-              <span class="tab-dot"></span>Programa secretarias
-              
-              
-            </button>
-          <button class="tab-add" data-action="newproj">+</button>
-        </div>
-        
-      </div>
-    </div>
-
-    <div class="body">
-      
-    
-    
-
-    
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="filter-btn" style="background:#6B46C1;border-color:#6B46C1;color:#fff" data-filter="pending">
-            Pendientes (1)
-          </button>
-          <button class="filter-btn " style="" data-filter="done">
-            Hechas (0)
-          </button>
-        </div>
-        <button class="btn-danger" data-deleteproj="1">🗑 Eliminar</button>
-      </div>
-    
-
-    
-
-    <div class="task-card " style="border-left:4px solid #B7791F">
-    <button class="task-checkbox " style="border-color:#B7791F" data-toggledone="1"></button>
-    <div class="task-body">
-      <div class="task-title ">Seguimiento semanal</div>
-      <div class="task-notes">Revisión de reservas</div>
-      <div class="task-meta">
-        <div class="priority-wrapper">
-          <button class="priority-badge" style="background:#FFFFF0;color:#B7791F;border-color:#FAF089" data-pdd="1">🟡 Media ▾</button>
-          <div class="priority-dropdown" id="pdd-1">
-            <button class="priority-option" style="background:transparent;color:#E53E3E" data-setpriority="urgent" data-taskid="1">🔴 Urgente</button><button class="priority-option" style="background:transparent;color:#DD6B20" data-setpriority="high" data-taskid="1">🟠 Alta</button><button class="priority-option" style="background:#FFFFF0;color:#B7791F" data-setpriority="medium" data-taskid="1">🟡 Media</button><button class="priority-option" style="background:transparent;color:#276749" data-setpriority="low" data-taskid="1">🟢 Baja</button>
-          </div>
-        </div>
-        <span class="deadline-badge" style="background:#F7FAFC;color:#718096;border-color:#E2E8F0">📅 En 9 días</span>
-      </div>
-    </div>
-    <div class="task-actions">
-      <button class="btn-icon" data-edittask="1">✏️</button>
-      <button class="btn-delete" data-deletetask="1">×</button>
-    </div>
-  </div>
-
-    
-      <button class="btn-add-task" style="background:#6B46C1;box-shadow:0 4px 16px #6B46C155" data-action="addtask">
-        + Añadir tarea a ThinkIN
-      </button>
-    
-  
-    </div>
-  </div>
+<div id="app"><div class="loading"><div style="font-size:32px">📋</div><p>Conectando con Supabase…</p></div></div>
 <div class="toasts" id="toasts"></div>
 
 <script>
@@ -786,6 +686,5 @@ async function saveTgConfig() {
   }
 })();
 </script>
-
-
-</body></html>
+</body>
+</html>
