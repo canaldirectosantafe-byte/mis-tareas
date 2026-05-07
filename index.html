@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Tareas</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, Palatino, serif; background: #F0F2F8; min-height: 100vh; }
+  button { cursor: pointer; font-family: inherit; }
+  input { font-family: inherit; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #1A202C, #2D3748); padding: 24px 20px 0; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .header-title { color: rgba(255,255,255,0.4); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3px; }
+  h1 { color: #fff; font-size: 22px; font-weight: 700; }
+  .header-actions { display: flex; align-items: center; gap: 8px; }
+  .status-badge { color: rgba(255,255,255,0.3); font-size: 11px; }
+  .btn-config { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); border-radius: 8px; padding: 5px 10px; font-size: 12px; }
+  .btn-config.connected { background: rgba(72,187,120,0.2); border-color: rgba(72,187,120,0.4); color: #9AE6B4; }
+  .notif-badge { background: #E53E3E; color: #fff; border-radius: 20px; padding: 5px 10px; font-size: 12px; font-weight: 700; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 3px; overflow-x: auto; scrollbar-width: none; max-width: 640px; margin: 0 auto; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { white-space: nowrap; padding: 10px 16px; border-radius: 10px 10px 0 0; border: none; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 7px; transition: all 0.18s; border-bottom: 3px solid transparent; }
+  .tab.active { background: #F0F2F8; font-weight: 700; border-bottom: 3px solid currentColor; }
+  .tab-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0; }
+  .tab.active .tab-dot { background: currentColor; }
+  .tab-count { color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 700; }
+  .tab-edit { font-size: 12px; opacity: 0.6; }
+  .tab-add { padding: 10px 14px; border-radius: 10px 10px 0 0; border: none; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.35); font-size: 20px; line-height: 1; }
+
+  /* Body */
+  .body { max-width: 640px; margin: 0 auto; padding: 18px 16px 40px; }
+
+  /* Cards */
+  .card { background: #fff; border-radius: 14px; padding: 18px; margin-bottom: 14px; border: 2px solid #E2E8F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+  .card-title { font-weight: 700; color: #2D3748; font-size: 14px; margin-bottom: 12px; }
+
+  /* Form inputs */
+  .input { width: 100%; padding: 9px 13px; border-radius: 9px; border: 1.5px solid #E2E8F0; font-size: 14px; font-family: inherit; outline: none; margin-bottom: 10px; }
+  .input-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; border: 1.5px solid #E2E8F0; font-family: inherit; outline: none; color: #2D3748; }
+  .input-notes { color: #666; font-size: 13px; }
+  .label { font-size: 12px; color: #718096; font-weight: 600; display: block; margin-bottom: 5px; }
+
+  /* Color picker */
+  .color-picker { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .color-dot { width: 26px; height: 26px; border-radius: 50%; border: 3px solid transparent; }
+  .color-dot.selected { border-color: #2D3748; }
+
+  /* Priority buttons */
+  .priority-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .priority-btn { padding: 5px 10px; border-radius: 7px; border: 2px solid; font-size: 11px; font-weight: 700; }
+
+  /* Action buttons */
+  .btn-row { display: flex; gap: 8px; }
+  .btn-primary { flex: 1; padding: 10px; color: #fff; border: none; border-radius: 9px; font-size: 13px; font-weight: 700; }
+  .btn-secondary { padding: 10px 14px; background: #F7F8FC; border: 1.5px solid #E2E8F0; border-radius: 9px; font-size: 13px; color: #666; }
+  .btn-danger { padding: 5px 10px; border-radius: 8px; font-size: 11px; background: transparent; color: #FC8181; border: 1.5px solid #FED7D7; }
+
+  /* Toolbar */
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .toolbar-left { display: flex; gap: 8px; }
+  .filter-btn { padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1.5px solid #E2E8F0; background: transparent; color: #718096; }
+  .filter-btn.active-pending { color: #fff; }
+  .filter-btn.active-done { background: #48BB78; color: #fff; border-color: #48BB78; }
+
+  /* Task card */
+  .task-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 13px 15px; margin-bottom: 8px; display: flex; gap: 11px; align-items: flex-start; box-shadow: 0 1px 6px rgba(0,0,0,0.04); transition: all 0.2s; }
+  .task-card.done { background: #FAFAFA; box-shadow: none; opacity: 0.6; }
+  .task-checkbox { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; margin-top: 2px; border: 2px solid; background: transparent; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .task-checkbox.checked { background: #48BB78; border-color: #48BB78; color: #fff; }
+  .task-body { flex: 1; min-width: 0; }
+  .task-title { font-size: 14px; font-weight: 600; color: #1A202C; line-height: 1.3; margin-bottom: 4px; }
+  .task-title.done { color: #A0AEC0; text-decoration: line-through; }
+  .task-notes { font-size: 12px; color: #718096; line-height: 1.4; margin-bottom: 6px; }
+  .task-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .priority-badge { border-radius: 6px; padding: 3px 9px; font-size: 11px; font-weight: 700; border: 1px solid; }
+  .deadline-badge { border-radius: 6px; padding: 3px 9px; font-size: 11px; font-weight: 600; border: 1px solid; }
+  .task-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .btn-icon { background: none; border: none; font-size: 14px; color: #A0AEC0; padding: 0; line-height: 1; }
+  .btn-delete { background: none; border: none; font-size: 18px; color: #CBD5E0; padding: 0; line-height: 1; }
+
+  /* Add task button */
+  .btn-add-task { width: 100%; margin-top: 8px; padding: 14px; color: #fff; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; }
+
+  /* Toast notifications */
+  .toasts { position: fixed; top: 16px; right: 16px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; max-width: 300px; }
+  .toast { background: #fff; border-radius: 12px; padding: 12px 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); display: flex; gap: 10px; align-items: flex-start; border: 2px solid; }
+  .toast-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .toast-title { font-size: 13px; color: #2D3748; font-weight: 600; line-height: 1.3; margin: 3px 0 1px; }
+  .toast-project { font-size: 11px; color: #718096; }
+  .toast-close { background: none; border: none; color: #CBD5E0; font-size: 18px; padding: 0; line-height: 1; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .modal { background: #fff; border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+
+  /* Empty state */
+  .empty { text-align: center; padding: 48px 24px; color: #A0AEC0; font-size: 15px; }
+
+  /* Priority dropdown */
+  .priority-dropdown { position: absolute; top: 100%; left: 0; margin-top: 4px; background: #fff; border: 1px solid #E2E8F0; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 100; overflow: hidden; min-width: 130px; }
+  .priority-option { display: block; width: 100%; padding: 9px 14px; text-align: left; border: none; background: transparent; font-size: 13px; font-weight: 600; }
+  .priority-wrapper { position: relative; }
+
+  /* Loading */
+  .loading { min-height: 100vh; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #718096; flex-direction: column; gap: 12px; }
+</style>
+</head>
+<body>
+
+<div id="app"><div class="loading"><div style="font-size:32px">📋</div><p>Conectando con Supabase…</p></div></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+const SUPABASE_URL = "https://mnmijirutugernuwiyhd.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ubWlqaXJ1dHVnZXJudXdpeWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDI1NDksImV4cCI6MjA5MzcxODU0OX0.LRN4sRpZzaStl9HvGmifBUjN9jKN1Kf7TQP_adN5u5U";
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const PRIORITIES = [
+  { id: "urgent", label: "Urgente", emoji: "🔴", color: "#E53E3E", bg: "#FFF5F5", border: "#FEB2B2", order: 1 },
+  { id: "high",   label: "Alta",    emoji: "🟠", color: "#DD6B20", bg: "#FFFAF0", border: "#FBD38D", order: 2 },
+  { id: "medium", label: "Media",   emoji: "🟡", color: "#B7791F", bg: "#FFFFF0", border: "#FAF089", order: 3 },
+  { id: "low",    label: "Baja",    emoji: "🟢", color: "#276749", bg: "#F0FFF4", border: "#9AE6B4", order: 4 },
+];
+const PROJECT_COLORS = ["#6B46C1","#2B6CB0","#276749","#C05621","#97266D","#2C7A7B","#744210","#1A365D"];
+
+let state = {
+  projects: [], tasks: [], activeProject: null,
+  showTaskForm: false, showProjForm: false, showEditProj: null,
+  showEditTask: null, showConfig: false, showDone: false,
+  openPriorityFor: null,
+  newTask: { title: "", priority: "medium", notes: "", deadline: "" },
+  newProj: { name: "", color: PROJECT_COLORS[0] },
+  editProj: { name: "", color: PROJECT_COLORS[0] },
+  editTask: { title: "", priority: "medium", notes: "", deadline: "" },
+  tgToken: localStorage.getItem("tg-token") || "",
+  tgChatId: localStorage.getItem("tg-chatid") || "",
+  notifications: [], shownNotifs: new Set(),
+};
+
+function p(id) { return state.projects.find(x => x.id === id); }
+function daysUntil(d) { if (!d) return null; return Math.ceil((new Date(d+"T23:59:00") - new Date()) / 86400000); }
+function dlLabel(d) {
+  if (!d) return null;
+  const n = daysUntil(d);
+  if (n < 0)   return { text:"Vencida",     color:"#E53E3E", urgent:true };
+  if (n === 0) return { text:"Hoy",          color:"#E53E3E", urgent:true };
+  if (n === 1) return { text:"Mañana",       color:"#DD6B20", urgent:true };
+  if (n <= 3)  return { text:`En ${n} días`, color:"#B7791F", urgent:false };
+  return             { text:`En ${n} días`,  color:"#718096", urgent:false };
+}
+
+async function sendTelegram(text) {
+  if (!state.tgToken || !state.tgChatId) return;
+  try {
+    await fetch(`https://api.telegram.org/bot${state.tgToken}/sendMessage`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: state.tgChatId, text })
+    });
+  } catch {}
+}
+
+function checkDeadlines() {
+  state.tasks.filter(t => !t.done && t.deadline).forEach(t => {
+    const d = daysUntil(t.deadline);
+    if (d !== null && d <= 1) {
+      const key = `${t.id}-${d}`;
+      if (!state.shownNotifs.has(key)) {
+        state.shownNotifs.add(key);
+        const proj = p(t.project_id);
+        const label = d < 0 ? "¡Tarea vencida!" : d === 0 ? "¡Vence hoy!" : "¡Vence mañana!";
+        const color = d <= 0 ? "#E53E3E" : "#DD6B20";
+        state.notifications.push({ id: Date.now(), taskTitle: t.title, project: proj?.name||"", label, color });
+        sendTelegram(`⏰ ${label}\n📌 ${t.title}\n📁 ${proj?.name||""}`);
+      }
+    }
+  });
+  renderToasts();
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+  const { projects, tasks, activeProject, showDone } = state;
+  const proj = p(activeProject);
+  const projTasks = tasks
+    .filter(t => t.project_id === activeProject && (showDone ? t.done : !t.done))
+    .sort((a, b) => {
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      return (PRIORITIES.find(x=>x.id===a.priority)?.order||9) - (PRIORITIES.find(x=>x.id===b.priority)?.order||9);
+    });
+  const pending = pid => tasks.filter(t => t.project_id === pid && !t.done).length;
+  const urgent  = pid => tasks.filter(t => t.project_id === pid && !t.done && t.priority==="urgent").length;
+  const done    = pid => tasks.filter(t => t.project_id === pid && t.done).length;
+  const tgOk = state.tgToken && state.tgChatId;
+
+  document.getElementById("app").innerHTML = `
+    ${state.showConfig ? configModal() : ""}
+
+    <div class="header">
+      <div class="header-top">
+        <div>
+          <div class="header-title">Panel de trabajo</div>
+          <h1>Mis Proyectos</h1>
+        </div>
+        <div class="header-actions">
+          <span class="status-badge">✅ Supabase</span>
+          <button class="btn-config ${tgOk?"connected":""}" onclick="openConfig()">
+            ${tgOk ? "✈️ Telegram ✓" : "⚙️ Configurar"}
+          </button>
+          ${state.notifications.length > 0 ? `<div class="notif-badge">🔔 ${state.notifications.length}</div>` : ""}
+        </div>
+      </div>
+      <div class="tabs">
+        ${projects.map(pr => {
+          const cnt = pending(pr.id), urg = urgent(pr.id), active = pr.id === activeProject;
+          return `<button class="tab ${active?"active":""}" style="color:${active?pr.color:"rgba(255,255,255,0.55)"}" onclick="setProject(${pr.id})">
+            <span class="tab-dot"></span>
+            ${pr.name}
+            ${cnt > 0 ? `<span class="tab-count" style="background:${urg>0?"#E53E3E":pr.color}">${cnt}</span>` : ""}
+            ${active ? `<span class="tab-edit" onclick="event.stopPropagation();openEditProj(${pr.id})">✏️</span>` : ""}
+          </button>`;
+        }).join("")}
+        <button class="tab-add" onclick="toggleNewProj()">+</button>
+      </div>
+    </div>
+
+    <div class="body">
+      ${state.showEditProj ? editProjForm() : ""}
+      ${state.showProjForm ? newProjForm() : ""}
+
+      ${proj ? `
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <button class="filter-btn ${!showDone?"active-pending":""}" style="${!showDone?`background:${proj.color};border-color:${proj.color};color:#fff`:""}" onclick="setShowDone(false)">
+              Pendientes (${pending(proj.id)})
+            </button>
+            <button class="filter-btn ${showDone?"active-done":""}" onclick="setShowDone(true)">
+              Hechas (${done(proj.id)})
+            </button>
+          </div>
+          ${projects.length > 1 ? `<button class="btn-danger" onclick="deleteProject(${proj.id})">🗑 Eliminar</button>` : ""}
+        </div>
+      ` : ""}
+
+      ${projTasks.length === 0 && !state.showTaskForm ? `
+        <div class="empty">${showDone ? "Ninguna tarea completada aún." : "Sin tareas pendientes. 🎉"}<br><span style="font-size:30px">📋</span></div>
+      ` : ""}
+
+      ${projTasks.map(t => state.showEditTask === t.id ? editTaskCard(t) : taskCard(t)).join("")}
+
+      ${!showDone ? (state.showTaskForm ? newTaskForm(proj) : `
+        <button class="btn-add-task" style="background:${proj?.color||"#6B46C1"};box-shadow:0 4px 16px ${proj?.color||"#6B46C1"}55" onclick="openTaskForm()">
+          + Añadir tarea a ${proj?.name||""}
+        </button>
+      `) : ""}
+    </div>
+  `;
+
+  // Re-attach priority dropdowns
+  document.querySelectorAll(".priority-wrapper").forEach(wrapper => {
+    document.addEventListener("click", e => {
+      if (!wrapper.contains(e.target)) {
+        const dd = wrapper.querySelector(".priority-dropdown");
+        if (dd) dd.style.display = "none";
+      }
+    }, { once: true });
+  });
+}
+
+function configModal() {
+  return `<div class="modal-overlay">
+    <div class="modal">
+      <p style="font-weight:700;font-size:16px;color:#2D3748;margin-bottom:4px">⚙️ Configuración Telegram</p>
+      <p style="font-size:12px;color:#718096;margin-bottom:20px">Introduce tus datos para recibir notificaciones en el móvil.</p>
+      <label class="label">Token del bot</label>
+      <input class="input" type="password" placeholder="1234567890:AAF..." value="${state.tgToken}" oninput="state.tgToken=this.value">
+      <label class="label">Chat ID</label>
+      <input class="input" placeholder="123456789" value="${state.tgChatId}" oninput="state.tgChatId=this.value">
+      <p style="font-size:11px;color:#A0AEC0;margin-bottom:18px">Obtén el token con @BotFather y el Chat ID con @userinfobot en Telegram.</p>
+      <div class="btn-row">
+        <button class="btn-primary" style="background:#2D3748" onclick="saveTgConfig()">Guardar y probar</button>
+        <button class="btn-secondary" onclick="closeConfig()">Cancelar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function editProjForm() {
+  const { editProj } = state;
+  return `<div class="card" style="border-color:${editProj.color}">
+    <div class="card-title">✏️ Editar proyecto</div>
+    <input class="input" value="${editProj.name}" oninput="state.editProj.name=this.value" onkeydown="if(event.key==='Enter')saveEditProj()">
+    <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${editProj.color===c?" selected":""}" style="background:${c}" onclick="state.editProj.color='${c}';render()"></button>`).join("")}</div>
+    <div class="btn-row">
+      <button class="btn-primary" style="background:${editProj.color}" onclick="saveEditProj()">Guardar cambios</button>
+      <button class="btn-secondary" onclick="state.showEditProj=null;render()">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function newProjForm() {
+  const { newProj } = state;
+  return `<div class="card">
+    <div class="card-title">Nuevo proyecto</div>
+    <input class="input" placeholder="Nombre del proyecto" value="${newProj.name}" oninput="state.newProj.name=this.value" onkeydown="if(event.key==='Enter')addProject()">
+    <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${newProj.color===c?" selected":""}" style="background:${c}" onclick="state.newProj.color='${c}';render()"></button>`).join("")}</div>
+    <div class="btn-row">
+      <button class="btn-primary" style="background:#2D3748" onclick="addProject()">Crear</button>
+      <button class="btn-secondary" onclick="state.showProjForm=false;render()">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function taskCard(t) {
+  const pr = PRIORITIES.find(x=>x.id===t.priority);
+  const dl = dlLabel(t.deadline);
+  return `<div class="task-card ${t.done?"done":""}" style="border-left:4px solid ${t.done?"#CBD5E0":pr.color}">
+    <button class="task-checkbox ${t.done?"checked":""}" style="border-color:${t.done?"#48BB78":pr.color}" onclick="toggleDone(${t.id})">
+      ${t.done?"✓":""}
+    </button>
+    <div class="task-body">
+      <div class="task-title ${t.done?"done":""}">${t.title}</div>
+      ${t.notes ? `<div class="task-notes">${t.notes}</div>` : ""}
+      <div class="task-meta">
+        ${!t.done ? `<div class="priority-wrapper">
+          <button class="priority-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}" onclick="togglePriorityDD(${t.id})">
+            ${pr.emoji} ${pr.label} ▾
+          </button>
+          <div class="priority-dropdown" id="pdd-${t.id}" style="display:none">
+            ${PRIORITIES.map(p=>`<button class="priority-option" style="background:${p.id===t.priority?p.bg:"transparent"};color:${p.color}" onclick="setPriority(${t.id},'${p.id}')">${p.emoji} ${p.label}</button>`).join("")}
+          </div>
+        </div>` : ""}
+        ${dl && !t.done ? `<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${dl.text}</span>` : ""}
+      </div>
+    </div>
+    <div class="task-actions">
+      ${!t.done ? `<button class="btn-icon" onclick="openEditTask(${t.id})">✏️</button>` : ""}
+      <button class="btn-delete" onclick="deleteTask(${t.id})">×</button>
+    </div>
+  </div>`;
+}
+
+function editTaskCard(t) {
+  const { editTask } = state;
+  const proj = p(state.activeProject);
+  return `<div class="card" style="border-color:${proj?.color||"#6B46C1"}">
+    <div style="font-size:12px;font-weight:700;color:${proj?.color};text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">✏️ Editando tarea</div>
+    <input class="input" value="${editTask.title}" oninput="state.editTask.title=this.value" onkeydown="if(event.key==='Enter')saveEditTask()">
+    <input class="input input-notes" placeholder="Notas (opcional)" value="${editTask.notes}" oninput="state.editTask.notes=this.value">
+    <label class="label">📅 Fecha límite</label>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+      <input type="date" class="input-sm" value="${editTask.deadline}" oninput="state.editTask.deadline=this.value">
+      ${editTask.deadline ? `<button style="font-size:11px;color:#FC8181;background:none;border:1px solid #FED7D7;border-radius:6px;padding:4px 8px" onclick="state.editTask.deadline='';render()">Quitar fecha</button>` : ""}
+    </div>
+    <div class="priority-row">
+      ${PRIORITIES.map(pr=>`<button class="priority-btn" style="border-color:${editTask.priority===pr.id?pr.color:pr.border};background:${editTask.priority===pr.id?pr.bg:"transparent"};color:${pr.color}" onclick="state.editTask.priority='${pr.id}';render()">${pr.emoji} ${pr.label}</button>`).join("")}
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" style="background:${proj?.color||"#6B46C1"}" onclick="saveEditTask()">Guardar</button>
+      <button class="btn-secondary" onclick="state.showEditTask=null;render()">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function newTaskForm(proj) {
+  const { newTask } = state;
+  return `<div class="card" style="border-color:${proj?.color||"#6B46C1"};margin-top:8px">
+    <div style="font-weight:700;color:${proj?.color};font-size:14px;margin-bottom:14px">Nueva tarea — ${proj?.name||""}</div>
+    <input class="input" placeholder="¿Qué hay que hacer?" value="${newTask.title}" oninput="state.newTask.title=this.value" onkeydown="if(event.key==='Enter')addTask()">
+    <input class="input input-notes" placeholder="Notas (opcional)" value="${newTask.notes}" oninput="state.newTask.notes=this.value">
+    <label class="label">📅 Fecha límite</label>
+    <input type="date" class="input-sm" value="${newTask.deadline}" oninput="state.newTask.deadline=this.value" style="margin-bottom:12px">
+    <div class="priority-row">
+      ${PRIORITIES.map(pr=>`<button class="priority-btn" style="border-color:${newTask.priority===pr.id?pr.color:pr.border};background:${newTask.priority===pr.id?pr.bg:"transparent"};color:${pr.color}" onclick="state.newTask.priority='${pr.id}';render()">${pr.emoji} ${pr.label}</button>`).join("")}
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" style="background:${proj?.color||"#6B46C1"}" onclick="addTask()">Añadir tarea</button>
+      <button class="btn-secondary" onclick="state.showTaskForm=false;render()">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function renderToasts() {
+  document.getElementById("toasts").innerHTML = state.notifications.map(n => `
+    <div class="toast" style="border-color:${n.color};border-left:6px solid ${n.color}">
+      <span style="font-size:18px">⏰</span>
+      <div style="flex:1">
+        <div class="toast-label" style="color:${n.color}">${n.label}</div>
+        <div class="toast-title">${n.taskTitle}</div>
+        <div class="toast-project">${n.project}</div>
+      </div>
+      <button class="toast-close" onclick="dismissToast(${n.id})">×</button>
+    </div>
+  `).join("");
+}
+
+// ── Event handlers ────────────────────────────────────────────────────────────
+function setProject(id) { state.activeProject = id; state.showDone = false; state.showTaskForm = false; state.showEditTask = null; render(); }
+function toggleNewProj() { state.showProjForm = !state.showProjForm; state.showEditProj = null; render(); }
+function setShowDone(v) { state.showDone = v; render(); }
+function openTaskForm() { state.showTaskForm = true; state.newTask = { title:"", priority:"medium", notes:"", deadline:"" }; render(); }
+function openConfig() { state.showConfig = true; render(); }
+function closeConfig() { state.showConfig = false; render(); }
+function dismissToast(id) { state.notifications = state.notifications.filter(n=>n.id!==id); renderToasts(); }
+function togglePriorityDD(id) {
+  const el = document.getElementById(`pdd-${id}`);
+  if (el) el.style.display = el.style.display === "none" ? "block" : "none";
+}
+function openEditProj(id) {
+  const pr = p(id);
+  state.showEditProj = id; state.editProj = { name: pr.name, color: pr.color };
+  state.showProjForm = false; render();
+}
+function openEditTask(id) {
+  const t = state.tasks.find(x=>x.id===id);
+  state.showEditTask = id;
+  state.editTask = { title: t.title, priority: t.priority, notes: t.notes||"", deadline: t.deadline||"" };
+  render();
+}
+
+// ── DB actions ────────────────────────────────────────────────────────────────
+async function addProject() {
+  const { name, color } = state.newProj;
+  if (!name.trim()) return;
+  const { data } = await db.from("projects").insert({ name: name.trim(), color }).select().single();
+  state.projects.push(data);
+  state.activeProject = data.id;
+  state.newProj = { name:"", color: PROJECT_COLORS[0] };
+  state.showProjForm = false;
+  render();
+}
+
+async function deleteProject(id) {
+  if (!confirm("¿Eliminar este proyecto y todas sus tareas?")) return;
+  await db.from("projects").delete().eq("id", id);
+  state.projects = state.projects.filter(p=>p.id!==id);
+  state.tasks = state.tasks.filter(t=>t.project_id!==id);
+  state.activeProject = state.projects[0]?.id || null;
+  render();
+}
+
+async function saveEditProj() {
+  const { showEditProj, editProj } = state;
+  if (!editProj.name.trim()) return;
+  await db.from("projects").update({ name: editProj.name.trim(), color: editProj.color }).eq("id", showEditProj);
+  state.projects = state.projects.map(p => p.id===showEditProj ? {...p, name:editProj.name.trim(), color:editProj.color} : p);
+  state.showEditProj = null;
+  render();
+}
+
+async function addTask() {
+  const { newTask, activeProject } = state;
+  if (!newTask.title.trim()) return;
+  const { data } = await db.from("tasks").insert({
+    project_id: activeProject, title: newTask.title.trim(),
+    notes: newTask.notes.trim(), priority: newTask.priority,
+    deadline: newTask.deadline || null, done: false
+  }).select().single();
+  state.tasks.push(data);
+  state.newTask = { title:"", priority:"medium", notes:"", deadline:"" };
+  state.showTaskForm = false;
+  render();
+}
+
+async function toggleDone(id) {
+  const t = state.tasks.find(x=>x.id===id);
+  await db.from("tasks").update({ done: !t.done }).eq("id", id);
+  state.tasks = state.tasks.map(x => x.id===id ? {...x, done:!x.done} : x);
+  render();
+}
+
+async function deleteTask(id) {
+  await db.from("tasks").delete().eq("id", id);
+  state.tasks = state.tasks.filter(t=>t.id!==id);
+  render();
+}
+
+async function setPriority(id, priority) {
+  await db.from("tasks").update({ priority }).eq("id", id);
+  state.tasks = state.tasks.map(t => t.id===id ? {...t, priority} : t);
+  render();
+}
+
+async function saveEditTask() {
+  const { showEditTask, editTask } = state;
+  if (!editTask.title.trim()) return;
+  await db.from("tasks").update({
+    title: editTask.title.trim(), priority: editTask.priority,
+    notes: editTask.notes.trim(), deadline: editTask.deadline || null
+  }).eq("id", showEditTask);
+  state.tasks = state.tasks.map(t => t.id===showEditTask ? {...t, ...editTask, deadline: editTask.deadline||null} : t);
+  state.showEditTask = null;
+  render();
+}
+
+async function saveTgConfig() {
+  localStorage.setItem("tg-token", state.tgToken);
+  localStorage.setItem("tg-chatid", state.tgChatId);
+  state.showConfig = false;
+  await sendTelegram("✅ ¡Notificaciones de tareas configuradas correctamente!");
+  render();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(async () => {
+  try {
+    const [{ data: projs }, { data: tsks }] = await Promise.all([
+      db.from("projects").select("*").order("id"),
+      db.from("tasks").select("*").order("id"),
+    ]);
+    state.projects = projs || [];
+    state.tasks = tsks || [];
+    state.activeProject = projs?.[0]?.id || null;
+    render();
+    checkDeadlines();
+  } catch(e) {
+    document.getElementById("app").innerHTML = `<div class="loading" style="color:#E53E3E"><div style="font-size:32px">⚠️</div><p>Error al conectar con Supabase</p><p style="font-size:12px;color:#718096">${e.message}</p></div>`;
+  }
+})();
+</script>
+</body>
+</html>
