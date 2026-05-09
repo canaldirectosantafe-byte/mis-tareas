@@ -340,9 +340,9 @@ function renderCharts(filtered){
     }).join("");
 
     return`<svg width="100%" viewBox="0 0 ${LABEL_W+CHART_W+60} ${svgH}" style="overflow:visible">
-      <text x="${LABEL_W}" y="16" font-size="11" fill="#A0AEC0" font-family="Georgia,serif" font-weight="700" letter-spacing="1" text-transform="uppercase">PENDIENTES</text>
-      <text x="${LABEL_W+80}" y="16" font-size="11" fill="#E53E3E" font-family="Georgia,serif" font-weight="700">VENCIDAS</text>
-      <text x="${LABEL_W+150}" y="16" font-size="11" fill="#48BB78" font-family="Georgia,serif" font-weight="700">HECHAS</text>
+      <text x="${LABEL_W}" y="16" font-size="11" fill="#6B46C1" font-family="Georgia,serif" font-weight="700">● Pendientes</text>
+      <text x="${LABEL_W+100}" y="16" font-size="11" fill="#E53E3E" font-family="Georgia,serif" font-weight="700">● Vencidas</text>
+      <text x="${LABEL_W+185}" y="16" font-size="11" fill="#48BB78" font-family="Georgia,serif" font-weight="700">● Hechas</text>
       ${rows}
     </svg>`;
   }
