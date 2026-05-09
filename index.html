@@ -756,13 +756,13 @@ async function saveTgConfig(){
       sbGet("projects").then(d=>({data:d})),
       sbGet("tasks").then(d=>({data:d})),
       sbGet("tags").then(d=>({data:d})),
-      sbGet("task_tags","select=task_id,tag_id").then(d=>({data:d})),
+      fetch(`${SUPABASE_URL}/rest/v1/task_tags?select=task_id,tag_id`,{headers}).then(r=>r.json()).then(d=>({data:Array.isArray(d)?d:[]})),
     ]);
-    state.projects=projs||[];
-    state.tasks=tsks||[];
-    state.tags=tgs||[];
-    // Build taskTags map
-    (ttags||[]).forEach(({task_id,tag_id})=>{
+    state.projects=Array.isArray(projs)?projs:[];
+    state.tasks=Array.isArray(tsks)?tsks:[];
+    state.tags=Array.isArray(tgs)?tgs:[];
+    const safeTtags=Array.isArray(ttags)?ttags:[];
+    safeTtags.forEach(({task_id,tag_id})=>{
       if(!state.taskTags[task_id])state.taskTags[task_id]=[];
       state.taskTags[task_id].push(tag_id);
     });
