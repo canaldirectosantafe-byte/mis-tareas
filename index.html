@@ -91,6 +91,10 @@ h1{color:#fff;font-size:22px;font-weight:700}
 /* Drag & Drop */
 .task-card.dragging{opacity:0.4;border:2px dashed #6B46C1}
 .task-card.drag-over{border-top:3px solid #6B46C1;margin-top:-2px}
+
+.tab.dragging-tab{opacity:0.4;border:2px dashed rgba(255,255,255,0.4)!important}
+.tab.drag-over-tab{border-left:3px solid #F6AD55!important}
+
 .drag-handle{cursor:grab;color:#CBD5E0;font-size:16px;padding:0 4px 0 0;flex-shrink:0;margin-top:2px;user-select:none}
 .drag-handle:active{cursor:grabbing}
 .tab.drop-target{background:rgba(107,70,193,0.3)!important;border-bottom:3px solid #6B46C1!important;transform:scale(1.05)}
@@ -268,7 +272,7 @@ function render(){
         <div class="tabs" style="margin-top:6px">
           ${projects.map(p=>{
             const cnt=pendingCount(p.id),urg=urgentCount(p.id),active=p.id===state.activeProject;
-            return`<button class="tab ${active?"active":""}" style="color:${active?p.color:"rgba(255,255,255,0.55)"}" data-project="${p.id}">
+            return`<button class="tab ${active?"active":""}" style="color:${active?p.color:"rgba(255,255,255,0.55)"}" data-project="${p.id}" draggable="true" data-dragtab="${p.id}">
               <span class="tab-dot"></span>${p.name}
               ${cnt>0?`<span class="tab-count" style="background:${urg>0?"#E53E3E":p.color}">${cnt}</span>`:""}
               ${overdueCount(p.id)>0?`<span class="tab-count" style="background:#E53E3E">${overdueCount(p.id)}⚠</span>`:""}
@@ -732,6 +736,62 @@ async function moveTaskToProject(taskId,newProjId){
   setProject(newProjId);
 }
 
+
+// ── Tab drag & drop (reorder projects) ───────────────────────────────────────
+let dragTabSrc=null;
+
+document.addEventListener("dragstart",function(e){
+  const tab=e.target.closest("[data-dragtab]");
+  if(!tab)return;
+  dragTabSrc=Number(tab.dataset.dragtab);
+  setTimeout(()=>tab.classList.add("dragging-tab"),0);
+  e.dataTransfer.effectAllowed="move";
+  e.dataTransfer.setData("text/tab",dragTabSrc);
+  e.stopPropagation();
+},true);
+
+document.addEventListener("dragend",function(e){
+  const tab=e.target.closest("[data-dragtab]");
+  if(tab)tab.classList.remove("dragging-tab");
+  document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
+  dragTabSrc=null;
+},true);
+
+document.addEventListener("dragover",function(e){
+  if(dragTabSrc===null)return;
+  const tab=e.target.closest("[data-dragtab]");
+  if(tab&&Number(tab.dataset.dragtab)!==dragTabSrc){
+    e.preventDefault();
+    document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
+    tab.classList.add("drag-over-tab");
+  }
+},true);
+
+document.addEventListener("drop",function(e){
+  if(dragTabSrc===null)return;
+  const tab=e.target.closest("[data-dragtab]");
+  if(tab&&Number(tab.dataset.dragtab)!==dragTabSrc){
+    e.preventDefault();
+    e.stopPropagation();
+    reorderProjects(dragTabSrc,Number(tab.dataset.dragtab));
+  }
+  document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
+  dragTabSrc=null;
+},true);
+
+async function reorderProjects(srcId,targetId){
+  const projs=[...state.projects];
+  const srcIdx=projs.findIndex(p=>p.id===srcId);
+  const tgtIdx=projs.findIndex(p=>p.id===targetId);
+  if(srcIdx===-1||tgtIdx===-1)return;
+  const[moved]=projs.splice(srcIdx,1);
+  projs.splice(tgtIdx,0,moved);
+  projs.forEach((p,i)=>p.sort_order=i*10);
+  state.projects=projs;
+  render();
+  await Promise.all(projs.map(p=>sbUpdate("projects",p.id,{sort_order:p.sort_order})));
+}
+
 // ── Event delegation ──────────────────────────────────────────────────────────
 document.addEventListener("click",function(e){
   const t=e.target;
@@ -943,7 +1003,7 @@ async function saveTgConfig(){
       sbGet("tags").then(d=>({data:d})),
       fetch(`${SUPABASE_URL}/rest/v1/task_tags?select=task_id,tag_id`,{headers}).then(r=>r.json()).then(d=>({data:Array.isArray(d)?d:[]})),
     ]);
-    state.projects=Array.isArray(projs)?projs:[];
+    state.projects=(Array.isArray(projs)?projs:[]).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
     state.tasks=(Array.isArray(tsks)?tsks:[]).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
     state.tags=Array.isArray(tgs)?tgs:[];
     const safeTtags=Array.isArray(ttags)?ttags:[];
