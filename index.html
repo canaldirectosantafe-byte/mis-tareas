@@ -87,6 +87,16 @@ h1{color:#fff;font-size:22px;font-weight:700}
 .toolbar-left{display:flex;gap:6px;flex-wrap:wrap}
 .filter-btn{padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #E2E8F0;background:transparent;color:#718096}
 /* Task cards */
+
+/* Drag & Drop */
+.task-card.dragging{opacity:0.4;border:2px dashed #6B46C1}
+.task-card.drag-over{border-top:3px solid #6B46C1;margin-top:-2px}
+.drag-handle{cursor:grab;color:#CBD5E0;font-size:16px;padding:0 4px 0 0;flex-shrink:0;margin-top:2px;user-select:none}
+.drag-handle:active{cursor:grabbing}
+.tab.drop-target{background:rgba(107,70,193,0.3)!important;border-bottom:3px solid #6B46C1!important;transform:scale(1.05)}
+.drop-zone-hint{display:none;position:fixed;top:0;left:0;right:0;background:rgba(45,27,105,0.85);color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:700;z-index:500;letter-spacing:1px}
+.drop-zone-hint.visible{display:block}
+
 .task-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:13px 15px;margin-bottom:8px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 1px 6px rgba(0,0,0,0.04);transition:all 0.2s}
 .task-card.done{background:#FAFAFA;box-shadow:none;opacity:0.6}
 .task-checkbox{width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:2px;border:2px solid;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:12px}
@@ -120,6 +130,7 @@ h1{color:#fff;font-size:22px;font-weight:700}
 <body>
 <div id="app"><div class="loading"><div style="font-size:32px">📋</div><p>Conectando con Supabase…</p></div></div>
 <div class="toasts" id="toasts"></div>
+<div class="drop-zone-hint" id="drop-hint">⬆ Arrastra aquí para cambiar de proyecto — suelta sobre la pestaña</div>
 
 <script>
 const SUPABASE_URL="https://mnmijirutugernuwiyhd.supabase.co";
@@ -149,6 +160,7 @@ let state={
   tgToken:localStorage.getItem("tg-token")||"",
   tgChatId:localStorage.getItem("tg-chatid")||"",
   notifications:[],shownNotifs:new Set(),
+  dragTaskId:null,dragOverTaskId:null,
 };
 
 // ── Supabase helpers ──────────────────────────────────────────────────────────
@@ -209,10 +221,7 @@ function getProjectTasks(){
     if(taskFilter==="done")   return t.done;
     if(taskFilter==="overdue")return !t.done&&t.deadline&&daysUntil(t.deadline)<0;
     return !t.done&&!(t.deadline&&daysUntil(t.deadline)<0);
-  }).sort((a,b)=>{
-    if(a.done!==b.done)return a.done?1:-1;
-    return(PRIORITIES.find(x=>x.id===a.priority)?.order||9)-(PRIORITIES.find(x=>x.id===b.priority)?.order||9);
-  });
+  }).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
 }
 const pendingCount=pid=>state.tasks.filter(t=>t.project_id===pid&&!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)&&taskMatchesHotel(t)).length;
 const overdueCount=pid=>state.tasks.filter(t=>t.project_id===pid&&!t.done&&t.deadline&&daysUntil(t.deadline)<0&&taskMatchesHotel(t)).length;
@@ -495,7 +504,8 @@ function taskCard(t){
   const dl=dlLabel(t.deadline);
   const tids=state.taskTags[t.id]||[];
   const taskTags=tids.map(tid=>state.tags.find(x=>x.id===tid)).filter(Boolean);
-  return`<div class="task-card ${t.done?"done":""}" style="border-left:4px solid ${t.done?"#CBD5E0":pr.color}">
+  return`<div class="task-card ${t.done?"done":""}" style="border-left:4px solid ${t.done?"#CBD5E0":pr.color}" draggable="true" data-dragtask="${t.id}">
+    <span class="drag-handle" title="Arrastrar">⠿</span>
     <button class="task-checkbox ${t.done?"checked":""}" style="border-color:${t.done?"#48BB78":pr.color}" data-toggledone="${t.id}">${t.done?"✓":""}</button>
     <div class="task-body">
       <div class="task-title ${t.done?"done":""}">${t.title}</div>
@@ -632,6 +642,94 @@ function renderToasts(){
       </div>
       <button class="toast-close" data-dismisstoast="${n.id}">×</button>
     </div>`).join("");
+}
+
+
+// ── Drag & Drop ───────────────────────────────────────────────────────────────
+let dragSrc=null;
+
+document.addEventListener("dragstart",function(e){
+  const card=e.target.closest("[data-dragtask]");
+  if(!card)return;
+  dragSrc=Number(card.dataset.dragtask);
+  state.dragTaskId=dragSrc;
+  setTimeout(()=>card.classList.add("dragging"),0);
+  e.dataTransfer.effectAllowed="move";
+  e.dataTransfer.setData("text/plain",dragSrc);
+  document.getElementById("drop-hint").classList.add("visible");
+});
+
+document.addEventListener("dragend",function(e){
+  const card=e.target.closest("[data-dragtask]");
+  if(card)card.classList.remove("dragging");
+  document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
+  document.querySelectorAll(".drop-target").forEach(el=>el.classList.remove("drop-target"));
+  document.getElementById("drop-hint").classList.remove("visible");
+  dragSrc=null;state.dragTaskId=null;
+});
+
+document.addEventListener("dragover",function(e){
+  e.preventDefault();
+  // Over a task card — reorder
+  const card=e.target.closest("[data-dragtask]");
+  if(card&&Number(card.dataset.dragtask)!==dragSrc){
+    document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
+    card.classList.add("drag-over");
+  }
+  // Over a tab — highlight
+  const tab=e.target.closest("[data-project]");
+  if(tab){
+    document.querySelectorAll(".drop-target").forEach(el=>el.classList.remove("drop-target"));
+    tab.classList.add("drop-target");
+  }
+});
+
+document.addEventListener("dragleave",function(e){
+  const card=e.target.closest("[data-dragtask]");
+  if(card)card.classList.remove("drag-over");
+  const tab=e.target.closest("[data-project]");
+  if(tab&&!tab.contains(e.relatedTarget))tab.classList.remove("drop-target");
+});
+
+document.addEventListener("drop",function(e){
+  e.preventDefault();
+  if(dragSrc===null)return;
+  const targetCard=e.target.closest("[data-dragtask]");
+  const targetTab=e.target.closest("[data-project]");
+
+  if(targetCard&&Number(targetCard.dataset.dragtask)!==dragSrc){
+    // Reorder within project
+    reorderTasks(dragSrc,Number(targetCard.dataset.dragtask));
+  } else if(targetTab){
+    const newProjId=Number(targetTab.dataset.project);
+    moveTaskToProject(dragSrc,newProjId);
+  }
+  document.querySelectorAll(".drag-over,.drop-target").forEach(el=>{el.classList.remove("drag-over");el.classList.remove("drop-target");});
+  document.getElementById("drop-hint").classList.remove("visible");
+  dragSrc=null;state.dragTaskId=null;
+});
+
+async function reorderTasks(srcId,targetId){
+  const tasks=[...state.tasks];
+  const srcIdx=tasks.findIndex(t=>t.id===srcId);
+  const tgtIdx=tasks.findIndex(t=>t.id===targetId);
+  if(srcIdx===-1||tgtIdx===-1)return;
+  const[moved]=tasks.splice(srcIdx,1);
+  tasks.splice(tgtIdx,0,moved);
+  // Reassign sort_order
+  tasks.forEach((t,i)=>t.sort_order=i*10);
+  state.tasks=tasks;
+  render();
+  // Persist to Supabase (batch)
+  await Promise.all(tasks.map(t=>sbUpdate("tasks",t.id,{sort_order:t.sort_order})));
+}
+
+async function moveTaskToProject(taskId,newProjId){
+  const task=state.tasks.find(t=>t.id===taskId);
+  if(!task||task.project_id===newProjId)return;
+  await sbUpdate("tasks",taskId,{project_id:newProjId,sort_order:Date.now()});
+  state.tasks=state.tasks.map(t=>t.id===taskId?{...t,project_id:newProjId}:t);
+  setProject(newProjId);
 }
 
 // ── Event delegation ──────────────────────────────────────────────────────────
@@ -846,7 +944,7 @@ async function saveTgConfig(){
       fetch(`${SUPABASE_URL}/rest/v1/task_tags?select=task_id,tag_id`,{headers}).then(r=>r.json()).then(d=>({data:Array.isArray(d)?d:[]})),
     ]);
     state.projects=Array.isArray(projs)?projs:[];
-    state.tasks=Array.isArray(tsks)?tsks:[];
+    state.tasks=(Array.isArray(tsks)?tsks:[]).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
     state.tags=Array.isArray(tgs)?tgs:[];
     const safeTtags=Array.isArray(ttags)?ttags:[];
     safeTtags.forEach(({task_id,tag_id})=>{
