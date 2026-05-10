@@ -1432,6 +1432,7 @@ async function changePin(){
   if(!nw||nw.length!==4||!/^\d+$/.test(nw)){alert("El nuevo PIN debe tener 4 dígitos");return;}
   await sbUpdate("app_config","pin",{value:nw}).catch(()=>{});
   state.appPin=nw;
+  localStorage.setItem("app-pin",nw);
   alert("PIN actualizado correctamente");
   state.showConfig=false;render();
 }
@@ -1451,10 +1452,17 @@ async function changePin(){
       if(!state.taskTags[task_id])state.taskTags[task_id]=[];
       state.taskTags[task_id].push(tag_id);
     });
+    // Load PIN from Supabase FIRST before rendering login
     (Array.isArray(cfg)?cfg:[]).forEach(({key,value})=>{
       if(key==="pin")state.appPin=value;
       if(key==="readonly_token")state.readonlyToken=value;
     });
+    // Persist PIN in localStorage as backup
+    if(state.appPin!=="1234") localStorage.setItem("app-pin",state.appPin);
+    else {
+      const saved=localStorage.getItem("app-pin");
+      if(saved) state.appPin=saved;
+    }
     state.activeProject=state.projects[0]?.id||null;
     render();checkDeadlines();
   }catch(e){
