@@ -131,7 +131,7 @@ const PRIORITIES=[
   {id:"medium",label:"Media",  emoji:"🟡",color:"#B7791F",bg:"#FFFFF0",border:"#FAF089",order:3},
   {id:"low",   label:"Baja",   emoji:"🟢",color:"#276749",bg:"#F0FFF4",border:"#9AE6B4",order:4},
 ];
-const PROJECT_COLORS=["#6B46C1","#2B6CB0","#276749","#C05621","#97266D","#2C7A7B","#744210","#1A365D"];
+const PROJECT_COLORS=["#6B46C1","#2B6CB0","#276749","#C05621","#97266D","#2C7A7B","#744210","#1A365D","#702459","#065666","#1A202C","#553C9A","#2A4365","#22543D","#7B341E","#44337A","#234E52","#5F370E","#1D4044","#3C366B","#2D3748","#1A365D","#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7","#DDA0DD","#98D8C8","#F7DC6F"];
 
 let state={
   projects:[],tasks:[],tags:[],taskTags:{}, // taskTags: {taskId: [tagId,...]}
@@ -295,7 +295,7 @@ function renderCharts(filtered){
   const projData=projects.map(p=>{
     const pt=filtered.filter(t=>t.project_id===p.id);
     return{
-      name:p.name,color:p.color,
+      name:p.name,color:p.color,projectId:p.id,
       pending:pt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length,
       overdue:pt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length,
       done:pt.filter(t=>t.done).length,
@@ -307,7 +307,7 @@ function renderCharts(filtered){
     const tids=Object.entries(taskTags).filter(([,tgs])=>tgs.includes(tg.id)).map(([tid])=>Number(tid));
     const tt=filtered.filter(t=>tids.includes(t.id));
     return{
-      name:tg.name,
+      name:tg.name,projectId:null,
       pending:tt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length,
       overdue:tt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length,
       done:tt.filter(t=>t.done).length,
@@ -317,7 +317,7 @@ function renderCharts(filtered){
   // ── No data ──
   if(!projData.length&&!tagData.length) return"";
 
-  function barChart(data,title){
+  function barChart(data,title,onClickKey){
     if(!data.length)return"";
     const maxVal=Math.max(...data.map(d=>d.pending+d.overdue+d.done),1);
     const BAR_H=28,GAP=10,LABEL_W=130,CHART_W=340,ROW=BAR_H+GAP;
@@ -330,12 +330,15 @@ function renderCharts(filtered){
       const dW=Math.round((d.done/maxVal)*CHART_W);
       const y=i*ROW;
       const shortName=d.name.length>18?d.name.slice(0,17)+"…":d.name;
+      const clickAttr=d.projectId?`data-gotoproject="${d.projectId}" style="cursor:pointer"`:"";
       return`
         <text x="${LABEL_W-8}" y="${y+BAR_H/2+5}" text-anchor="end" font-size="12" fill="#718096" font-family="Georgia,serif">${shortName}</text>
-        ${pW>0?`<rect x="${LABEL_W}" y="${y}" width="${pW}" height="${BAR_H}" rx="3" fill="#6B46C1" opacity="0.85"/>`:``}
-        ${oW>0?`<rect x="${LABEL_W+pW}" y="${y}" width="${oW}" height="${BAR_H}" rx="3" fill="#E53E3E" opacity="0.85"/>`:``}
-        ${dW>0?`<rect x="${LABEL_W+pW+oW}" y="${y}" width="${dW}" height="${BAR_H}" rx="3" fill="#48BB78" opacity="0.85"/>`:``}
-        ${total>0?`<text x="${LABEL_W+pW+oW+dW+6}" y="${y+BAR_H/2+5}" font-size="11" fill="#A0AEC0" font-family="Georgia,serif">${total}</text>`:""}
+        <g ${clickAttr}>
+          ${pW>0?`<rect x="${LABEL_W}" y="${y}" width="${pW}" height="${BAR_H}" rx="3" fill="#6B46C1" opacity="0.85"/>`:``}
+          ${oW>0?`<rect x="${LABEL_W+pW}" y="${y}" width="${oW}" height="${BAR_H}" rx="3" fill="#E53E3E" opacity="0.85"/>`:``}
+          ${dW>0?`<rect x="${LABEL_W+pW+oW}" y="${y}" width="${dW}" height="${BAR_H}" rx="3" fill="#48BB78" opacity="0.85"/>`:``}
+          ${total>0?`<text x="${LABEL_W+pW+oW+dW+6}" y="${y+BAR_H/2+5}" font-size="11" fill="#A0AEC0" font-family="Georgia,serif">${total}</text>`:""}
+        </g>
       `;
     }).join("");
 
@@ -354,14 +357,14 @@ function renderCharts(filtered){
     <div class="dash-section">
       <div class="dash-section-title" style="color:#2D3748"><span style="background:#2D3748"></span>📊 Estadísticas por pestaña</div>
       <div style="background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #E2E8F0;margin-bottom:12px;overflow-x:auto">
-        ${barChart(projData,"")}
+        ${barChart(projData,"","project")}
       </div>
     </div>
     ${tagData.length>0?`
     <div class="dash-section">
       <div class="dash-section-title" style="color:#2D3748"><span style="background:#2D3748"></span>🏷 Estadísticas por hotel</div>
       <div style="background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #E2E8F0;margin-bottom:12px;overflow-x:auto">
-        ${barChart(tagData,"")}
+        ${barChart(tagData,"","tag")}
       </div>
     </div>`:""}
   `;
