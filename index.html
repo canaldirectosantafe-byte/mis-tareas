@@ -8,23 +8,51 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,Palatino,serif;background:#F0F2F8;min-height:100vh}
 button{cursor:pointer;font-family:inherit}
-input,select{font-family:inherit}
+input,select,textarea{font-family:inherit}
+
+/* ── Login ── */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1A202C,#2D3748)}
+.login-box{background:#fff;border-radius:20px;padding:40px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-logo{font-size:40px;margin-bottom:12px}
+.login-title{font-size:20px;font-weight:700;color:#2D3748;margin-bottom:4px}
+.login-sub{font-size:13px;color:#718096;margin-bottom:24px}
+.pin-dots{display:flex;gap:12px;justify-content:center;margin-bottom:20px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #CBD5E0;background:transparent;transition:all 0.2s}
+.pin-dot.filled{background:#6B46C1;border-color:#6B46C1}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto 16px}
+.pin-btn{background:#F7F8FC;border:1.5px solid #E2E8F0;border-radius:12px;padding:16px;font-size:18px;font-weight:700;color:#2D3748;transition:all 0.15s}
+.pin-btn:active{background:#E2E8F0}
+.pin-error{color:#E53E3E;font-size:13px;margin-top:8px}
+.readonly-link{font-size:12px;color:#A0AEC0;margin-top:16px;cursor:pointer;text-decoration:underline}
+
+/* ── Header ── */
 .header{background:linear-gradient(135deg,#1A202C,#2D3748);padding:24px 20px 0}
-.header-inner{max-width:720px;margin:0 auto}
-.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.header-inner{max-width:760px;margin:0 auto}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .header-label{color:rgba(255,255,255,0.4);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px}
 h1{color:#fff;font-size:22px;font-weight:700}
 .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .status-ok{color:rgba(255,255,255,0.3);font-size:11px}
-.btn-config{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);border-radius:8px;padding:5px 10px;font-size:12px}
-.btn-config.connected{background:rgba(72,187,120,0.2);border-color:rgba(72,187,120,0.4);color:#9AE6B4}
+.btn-hdr{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);border-radius:8px;padding:5px 10px;font-size:12px}
+.btn-hdr.connected{background:rgba(72,187,120,0.2);border-color:rgba(72,187,120,0.4);color:#9AE6B4}
 .notif-badge{background:#E53E3E;color:#fff;border-radius:20px;padding:5px 10px;font-size:12px;font-weight:700}
-.nav{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;margin-bottom:6px}
+
+/* ── Search bar ── */
+.search-bar{padding:0 20px 12px;max-width:760px;margin:0 auto}
+.search-input{width:100%;padding:9px 14px 9px 36px;border-radius:10px;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:13px;font-family:inherit;outline:none}
+.search-input::placeholder{color:rgba(255,255,255,0.4)}
+.search-wrap{position:relative}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.4);font-size:14px;pointer-events:none}
+
+/* ── Nav ── */
+.nav{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;margin-bottom:0}
 .nav::-webkit-scrollbar{display:none}
-.nav-tab{white-space:nowrap;padding:10px 18px;border-radius:10px 10px 0 0;border:none;font-size:13px;font-weight:500;transition:all 0.18s;border-bottom:3px solid transparent}
+.nav-tab{white-space:nowrap;padding:10px 16px;border-radius:10px 10px 0 0;border:none;font-size:13px;font-weight:500;transition:all 0.18s;border-bottom:3px solid transparent}
 .nav-tab.active{background:#F0F2F8;font-weight:700}
 .nav-tab:not(.active){background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55)}
-.tabs{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none}
+
+/* ── Project tabs ── */
+.tabs{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;margin-top:6px}
 .tabs::-webkit-scrollbar{display:none}
 .tab{white-space:nowrap;padding:10px 16px;border-radius:10px 10px 0 0;border:none;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;transition:all 0.18s;border-bottom:3px solid transparent}
 .tab.active{background:#F0F2F8;font-weight:700}
@@ -32,77 +60,102 @@ h1{color:#fff;font-size:22px;font-weight:700}
 .tab.active .tab-dot{background:currentColor}
 .tab-count{color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700}
 .tab-add{padding:10px 14px;border-radius:10px 10px 0 0;border:none;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.35);font-size:20px;line-height:1}
-.body{max-width:720px;margin:0 auto;padding:18px 16px 40px}
-/* Dashboard */
+
+/* ── Body ── */
+.body{max-width:760px;margin:0 auto;padding:18px 16px 40px}
+
+/* ── Hotel filter ── */
+.hotel-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.hotel-btn{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid #E2E8F0;background:transparent;color:#718096;transition:all 0.15s}
+.hotel-btn.active{background:#2D3748;border-color:#2D3748;color:#fff}
+
+/* ── Dashboard ── */
 .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 @media(max-width:500px){.dash-grid{grid-template-columns:1fr}}
 .stat-card{border-radius:14px;padding:18px;text-align:center;border:2px solid}
 .stat-num{font-size:36px;font-weight:700;margin-bottom:4px}
 .stat-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;opacity:0.7}
-/* Hotel filter bar */
-.hotel-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
-.hotel-btn{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid #E2E8F0;background:transparent;color:#718096;transition:all 0.15s}
-.hotel-btn.active{background:#2D3748;border-color:#2D3748;color:#fff}
+.proj-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px}
+.proj-card{background:#fff;border-radius:12px;padding:14px 16px;border:2px solid;display:flex;align-items:center;gap:12px;cursor:pointer;transition:box-shadow 0.15s}
+.proj-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+.proj-color-bar{width:4px;height:36px;border-radius:2px;flex-shrink:0}
+.proj-name{font-size:13px;font-weight:700;color:#2D3748;margin-bottom:2px}
+.proj-counts{font-size:11px;color:#718096}
 .dash-section{margin-bottom:22px}
 .dash-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .dash-section-title span{display:inline-block;width:3px;height:14px;border-radius:2px}
-.dash-task{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:10px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.dash-task{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:10px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer;transition:box-shadow 0.15s}
+.dash-task:hover{box-shadow:0 2px 10px rgba(0,0,0,0.08)}
 .dash-task-left{flex:1;min-width:0}
 .dash-task-name{font-size:13px;font-weight:600;color:#1A202C;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dash-task-meta{font-size:11px;color:#718096;display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px}
 .dash-task-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .dash-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;border:1px solid}
 .dash-empty{text-align:center;padding:20px;color:#A0AEC0;font-size:13px;background:#fff;border-radius:10px;border:1px dashed #E2E8F0}
-.proj-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px}
-.proj-card{background:#fff;border-radius:12px;padding:14px 16px;border:2px solid;display:flex;align-items:center;gap:12px}
-.proj-color-bar{width:4px;height:36px;border-radius:2px;flex-shrink:0}
-.proj-name{font-size:13px;font-weight:700;color:#2D3748;margin-bottom:2px}
-.proj-counts{font-size:11px;color:#718096}
-/* Forms */
+
+/* ── Calendar ── */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-title{font-size:16px;font-weight:700;color:#2D3748}
+.cal-nav{background:none;border:1.5px solid #E2E8F0;border-radius:8px;padding:6px 12px;font-size:14px;color:#718096}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day-name{text-align:center;font-size:11px;font-weight:700;color:#A0AEC0;text-transform:uppercase;padding:6px 0}
+.cal-day{background:#fff;border-radius:8px;min-height:80px;padding:6px;border:1px solid #E2E8F0;position:relative}
+.cal-day.today{border-color:#6B46C1;border-width:2px}
+.cal-day.other-month{background:#F7F8FC;opacity:0.6}
+.cal-day-num{font-size:12px;font-weight:700;color:#4A5568;margin-bottom:4px}
+.cal-day.today .cal-day-num{color:#6B46C1}
+.cal-task-dot{font-size:10px;padding:1px 5px;border-radius:4px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+
+/* ── Weekly ── */
+.week-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.week-col{background:#fff;border-radius:10px;border:1px solid #E2E8F0;overflow:hidden}
+.week-col-header{padding:10px;text-align:center;font-size:12px;font-weight:700;color:#4A5568;border-bottom:1px solid #E2E8F0}
+.week-col-header.today{background:#6B46C1;color:#fff}
+.week-cols{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.week-task{font-size:11px;padding:4px 7px;border-radius:5px;margin:4px;cursor:pointer;border-left:3px solid}
+
+/* ── Forms ── */
 .card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;border:2px solid #E2E8F0;box-shadow:0 4px 16px rgba(0,0,0,0.07)}
 .card-title{font-weight:700;color:#2D3748;font-size:14px;margin-bottom:12px}
 .input{width:100%;padding:9px 13px;border-radius:9px;border:1.5px solid #E2E8F0;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px}
 .input-sm{padding:7px 12px;font-size:13px;border-radius:8px;border:1.5px solid #E2E8F0;font-family:inherit;outline:none;color:#2D3748}
 .input-notes{color:#666;font-size:13px}
+.textarea{width:100%;padding:9px 13px;border-radius:9px;border:1.5px solid #E2E8F0;font-size:13px;font-family:inherit;outline:none;resize:vertical;min-height:70px;margin-bottom:10px}
 .label{font-size:12px;color:#718096;font-weight:600;display:block;margin-bottom:5px}
-.color-picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.color-dot{width:26px;height:26px;border-radius:50%;border:3px solid transparent}
+.color-picker{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.color-dot{width:24px;height:24px;border-radius:50%;border:3px solid transparent}
 .color-dot.selected{border-color:#2D3748}
 .priority-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .priority-btn{padding:5px 10px;border-radius:7px;border:2px solid;font-size:11px;font-weight:700}
+.recurrence-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.rec-btn{padding:5px 10px;border-radius:7px;border:2px solid #E2E8F0;font-size:11px;font-weight:600;color:#718096;background:transparent}
+.rec-btn.active{background:#EDF2FF;border-color:#6B46C1;color:#6B46C1}
 .btn-row{display:flex;gap:8px}
 .btn-primary{flex:1;padding:10px;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700}
 .btn-secondary{padding:10px 14px;background:#F7F8FC;border:1.5px solid #E2E8F0;border-radius:9px;font-size:13px;color:#666}
 .btn-danger{padding:5px 10px;border-radius:8px;font-size:11px;background:transparent;color:#FC8181;border:1.5px solid #FED7D7}
-/* Tags UI */
+.btn-sm{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600}
+
+/* ── Tags ── */
 .tags-section{margin-bottom:12px}
 .tags-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .tag-chip{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;border:1.5px solid;cursor:pointer;transition:all 0.15s}
 .tag-chip.selected{background:#2D3748;border-color:#2D3748;color:#fff}
 .tag-chip:not(.selected){background:transparent;border-color:#CBD5E0;color:#718096}
-.tag-pill{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#EDF2FF;border:1px solid #C3DAFE;color:#3730A3;display:inline-flex;align-items:center;gap:4px}
-.tag-pill-remove{cursor:pointer;opacity:0.6;font-size:13px;line-height:1}
-/* Toolbar */
+.tag-pill{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#EDF2FF;border:1px solid #C3DAFE;color:#3730A3}
+
+/* ── Toolbar ── */
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .toolbar-left{display:flex;gap:6px;flex-wrap:wrap}
 .filter-btn{padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid #E2E8F0;background:transparent;color:#718096}
-/* Task cards */
 
-/* Drag & Drop */
-.task-card.dragging{opacity:0.4;border:2px dashed #6B46C1}
-.task-card.drag-over{border-top:3px solid #6B46C1;margin-top:-2px}
-
-.tab.dragging-tab{opacity:0.4;border:2px dashed rgba(255,255,255,0.4)!important}
-.tab.drag-over-tab{border-left:3px solid #F6AD55!important}
-
-.drag-handle{cursor:grab;color:#CBD5E0;font-size:16px;padding:0 4px 0 0;flex-shrink:0;margin-top:2px;user-select:none}
-.drag-handle:active{cursor:grabbing}
-.tab.drop-target{background:rgba(107,70,193,0.3)!important;border-bottom:3px solid #6B46C1!important;transform:scale(1.05)}
-.drop-zone-hint{display:none;position:fixed;top:0;left:0;right:0;background:rgba(45,27,105,0.85);color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:700;z-index:500;letter-spacing:1px}
-.drop-zone-hint.visible{display:block}
-
+/* ── Task cards ── */
 .task-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:13px 15px;margin-bottom:8px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 1px 6px rgba(0,0,0,0.04);transition:all 0.2s}
 .task-card.done{background:#FAFAFA;box-shadow:none;opacity:0.6}
+.task-card.dragging{opacity:0.4;border:2px dashed #6B46C1}
+.task-card.drag-over{border-top:3px solid #6B46C1}
+.drag-handle{cursor:grab;color:#CBD5E0;font-size:16px;padding:0 4px 0 0;flex-shrink:0;margin-top:2px;user-select:none}
+.drag-handle:active{cursor:grabbing}
 .task-checkbox{width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:2px;border:2px solid;background:transparent;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:12px}
 .task-checkbox.checked{background:#48BB78;border-color:#48BB78;color:#fff}
 .task-body{flex:1;min-width:0}
@@ -113,28 +166,61 @@ h1{color:#fff;font-size:22px;font-weight:700}
 .task-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
 .priority-badge{border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;border:1px solid}
 .deadline-badge{border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;border:1px solid}
+.rec-badge{border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;background:#EDF2FF;border:1px solid #C3DAFE;color:#3730A3}
 .task-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
 .btn-icon{background:none;border:none;font-size:14px;color:#A0AEC0;padding:0;line-height:1}
 .btn-delete{background:none;border:none;font-size:18px;color:#CBD5E0;padding:0;line-height:1}
 .btn-add-task{width:100%;margin-top:8px;padding:14px;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700}
+
+/* ── Task detail panel ── */
+.task-detail{background:#fff;border-radius:14px;border:2px solid #E2E8F0;margin-bottom:14px;overflow:hidden}
+.task-detail-header{padding:16px 18px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between}
+.task-detail-body{padding:16px 18px}
+.subtask-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #F7F8FC}
+.subtask-check{width:18px;height:18px;border-radius:4px;border:2px solid #CBD5E0;background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+.subtask-check.done{background:#48BB78;border-color:#48BB78;color:#fff}
+.subtask-title{font-size:13px;color:#2D3748;flex:1}
+.subtask-title.done{text-decoration:line-through;color:#A0AEC0}
+.comment-item{padding:8px 12px;background:#F7F8FC;border-radius:8px;margin-bottom:6px}
+.comment-text{font-size:13px;color:#2D3748;line-height:1.4}
+.comment-date{font-size:10px;color:#A0AEC0;margin-top:3px}
+.attachment-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#F7F8FC;border-radius:8px;margin-bottom:6px}
+.attachment-link{font-size:13px;color:#6B46C1;text-decoration:none;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.attachment-link:hover{text-decoration:underline}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#A0AEC0;margin:12px 0 8px}
+
+/* ── Priority dropdown ── */
 .priority-wrapper{position:relative}
 .priority-dropdown{position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid #E2E8F0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:100;overflow:hidden;min-width:130px;display:none}
 .priority-option{display:block;width:100%;padding:9px 14px;text-align:left;border:none;background:transparent;font-size:13px;font-weight:600}
-/* Toasts */
+
+/* ── Toasts ── */
 .toasts{position:fixed;top:16px;right:16px;z-index:1000;display:flex;flex-direction:column;gap:8px;max-width:300px}
 .toast{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 8px 32px rgba(0,0,0,0.15);display:flex;gap:10px;align-items:flex-start;border:2px solid}
 .toast-close{background:none;border:none;color:#CBD5E0;font-size:18px;padding:0;line-height:1}
-/* Modal */
+
+/* ── Modal ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px}
-.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:90vh;overflow-y:auto}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:90vh;overflow-y:auto}
+
+/* ── Readonly banner ── */
+.readonly-banner{background:#F6AD55;color:#744210;text-align:center;padding:8px;font-size:12px;font-weight:700}
+
+/* ── Drag tab ── */
+.tab.dragging-tab{opacity:0.4;border:2px dashed rgba(255,255,255,0.4)!important}
+.tab.drag-over-tab{border-left:3px solid #F6AD55!important}
+.drop-zone-hint{display:none;position:fixed;top:0;left:0;right:0;background:rgba(45,27,105,0.85);color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:700;z-index:500}
+.drop-zone-hint.visible{display:block}
+
 .empty{text-align:center;padding:48px 24px;color:#A0AEC0;font-size:15px}
 .loading{min-height:100vh;display:flex;align-items:center;justify-content:center;font-size:15px;color:#718096;flex-direction:column;gap:12px}
+.search-results-banner{background:#EDF2FF;border:1px solid #C3DAFE;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#3730A3;font-weight:600}
 </style>
 </head>
 <body>
-<div id="app"><div class="loading"><div style="font-size:32px">📋</div><p>Conectando con Supabase…</p></div></div>
+<div id="app"><div class="loading"><div style="font-size:32px">📋</div><p>Cargando…</p></div></div>
 <div class="toasts" id="toasts"></div>
-<div class="drop-zone-hint" id="drop-hint">⬆ Arrastra aquí para cambiar de proyecto — suelta sobre la pestaña</div>
+<div class="drop-zone-hint" id="drop-hint">⬆ Suelta sobre una pestaña para mover la tarea</div>
 
 <script>
 const SUPABASE_URL="https://mnmijirutugernuwiyhd.supabase.co";
@@ -146,39 +232,52 @@ const PRIORITIES=[
   {id:"medium",label:"Media",  emoji:"🟡",color:"#B7791F",bg:"#FFFFF0",border:"#FAF089",order:3},
   {id:"low",   label:"Baja",   emoji:"🟢",color:"#276749",bg:"#F0FFF4",border:"#9AE6B4",order:4},
 ];
-const PROJECT_COLORS=["#6B46C1","#2B6CB0","#276749","#C05621","#97266D","#2C7A7B","#744210","#1A365D","#702459","#065666","#1A202C","#553C9A","#2A4365","#22543D","#7B341E","#44337A","#234E52","#5F370E","#1D4044","#3C366B","#2D3748","#1A365D","#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7","#DDA0DD","#98D8C8","#F7DC6F"];
+const RECURRENCE=[
+  {id:"daily",label:"Diaria"},{id:"weekly",label:"Semanal"},
+  {id:"monthly",label:"Mensual"},{id:"yearly",label:"Anual"},
+];
+const PROJECT_COLORS=["#6B46C1","#2B6CB0","#276749","#C05621","#97266D","#2C7A7B","#744210","#1A365D","#702459","#065666","#553C9A","#2A4365","#22543D","#7B341E","#44337A","#234E52","#3C366B","#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7","#DDA0DD","#98D8C8","#F7DC6F","#A8E6CF","#FFD3B6","#FFAAA5","#85C1E9","#82E0AA"];
+const DAYS=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+const MONTHS=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
+// ── Supabase ──────────────────────────────────────────────────────────────────
+const hdrs={apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json"};
+async function sbGet(table,q=""){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${q}&order=id.asc`,{headers:hdrs});return r.json();}
+async function sbInsert(table,data){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:"POST",headers:{...hdrs,Prefer:"return=representation"},body:JSON.stringify(data)});const j=await r.json();return Array.isArray(j)?j[0]:j;}
+async function sbUpdate(table,id,data){await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:"PATCH",headers:hdrs,body:JSON.stringify(data)});}
+async function sbDelete(table,id){await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:"DELETE",headers:hdrs});}
+async function sbDeleteWhere(table,col,val){await fetch(`${SUPABASE_URL}/rest/v1/${table}?${col}=eq.${val}`,{method:"DELETE",headers:hdrs});}
+async function sbInsertMany(table,rows){if(!rows.length)return;await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:"POST",headers:hdrs,body:JSON.stringify(rows)});}
+
+// ── State ─────────────────────────────────────────────────────────────────────
 let state={
-  projects:[],tasks:[],tags:[],taskTags:{}, // taskTags: {taskId: [tagId,...]}
-  activeProject:null,
-  view:"dashboard",
-  taskFilter:"pending",
-  hotelFilter:null, // tag id or null = all
-  showTaskForm:false,showProjForm:false,showEditProj:null,
-  showEditTask:null,showConfig:false,showTagManager:false,
-  newTask:{title:"",priority:"medium",notes:"",deadline:"",tagIds:[]},
+  loggedIn:false, readonly:false, pinInput:"", pinError:"",
+  appPin:"1234", readonlyToken:"lectura",
+  projects:[],tasks:[],tags:[],taskTags:{},
+  subtasks:{},comments:{},attachments:{},
+  activeProject:null, view:"dashboard",
+  taskFilter:"pending", hotelFilter:null,
+  calYear:new Date().getFullYear(), calMonth:new Date().getMonth(),
+  weekOffset:0,
+  showTaskForm:false, showProjForm:false, showEditProj:null,
+  showEditTask:null, showConfig:false, showTagManager:false,
+  showDetail:null,
+  newTask:{title:"",priority:"medium",notes:"",deadline:"",tagIds:[],recurrence:null},
   newProj:{name:"",color:PROJECT_COLORS[0]},
   editProj:{name:"",color:PROJECT_COLORS[0]},
-  editTask:{title:"",priority:"medium",notes:"",deadline:"",tagIds:[]},
-  newTagName:"",
+  editTask:{title:"",priority:"medium",notes:"",deadline:"",tagIds:[],recurrence:null},
+  newTagName:"", newSubtask:"", newComment:"",
+  newAttachLabel:"", newAttachUrl:"",
   tgToken:localStorage.getItem("tg-token")||"",
   tgChatId:localStorage.getItem("tg-chatid")||"",
+  searchQuery:"",
   notifications:[],shownNotifs:new Set(),
-  dragTaskId:null,dragOverTaskId:null,
+  dragTaskId:null,
 };
-
-// ── Supabase helpers ──────────────────────────────────────────────────────────
-const headers={apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json"};
-async function sbGet(table,q=""){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${q}&order=id.asc`,{headers});return r.json();}
-async function sbInsert(table,data){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:"POST",headers:{...headers,Prefer:"return=representation"},body:JSON.stringify(data)});const j=await r.json();return Array.isArray(j)?j[0]:j;}
-async function sbUpdate(table,id,data){await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:"PATCH",headers,body:JSON.stringify(data)});}
-async function sbDelete(table,id){await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:"DELETE",headers});}
-async function sbDeleteWhere(table,col,val){await fetch(`${SUPABASE_URL}/rest/v1/${table}?${col}=eq.${val}`,{method:"DELETE",headers});}
-async function sbInsertMany(table,rows){if(!rows.length)return;await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:"POST",headers,body:JSON.stringify(rows)});}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const proj=id=>state.projects.find(x=>x.id===id);
-const tag=id=>state.tags.find(x=>x.id===id);
+const tagObj=id=>state.tags.find(x=>x.id===id);
 function daysUntil(d){if(!d)return null;return Math.ceil((new Date(d+"T23:59:00")-new Date())/86400000);}
 function dlLabel(d){
   if(!d)return null;const n=daysUntil(d);
@@ -189,12 +288,10 @@ function dlLabel(d){
   return       {text:`En ${n} días`, color:"#718096",urgent:false};
 }
 function fmtDate(d){if(!d)return"";const[y,m,day]=d.split("-");return`${day}/${m}/${y}`;}
-function taskMatchesHotel(task){
+function taskMatchesHotel(t){
   if(!state.hotelFilter)return true;
-  const tids=state.taskTags[task.id]||[];
-  return tids.includes(state.hotelFilter);
+  return(state.taskTags[t.id]||[]).includes(state.hotelFilter);
 }
-
 async function sendTelegram(text){
   if(!state.tgToken||!state.tgChatId)return;
   try{await fetch(`https://api.telegram.org/bot${state.tgToken}/sendMessage`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:state.tgChatId,text})});}catch{}
@@ -218,31 +315,69 @@ function checkDeadlines(){
 
 // ── Computed ──────────────────────────────────────────────────────────────────
 function getProjectTasks(){
-  const{tasks,activeProject,taskFilter}=state;
-  return tasks.filter(t=>{
+  const{tasks,activeProject,taskFilter,searchQuery}=state;
+  let filtered=tasks.filter(t=>{
     if(t.project_id!==activeProject)return false;
     if(!taskMatchesHotel(t))return false;
+    if(searchQuery){
+      const q=searchQuery.toLowerCase();
+      if(!t.title.toLowerCase().includes(q)&&!(t.notes||"").toLowerCase().includes(q))return false;
+    }
     if(taskFilter==="done")   return t.done;
     if(taskFilter==="overdue")return !t.done&&t.deadline&&daysUntil(t.deadline)<0;
     return !t.done&&!(t.deadline&&daysUntil(t.deadline)<0);
-  }).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
+  });
+  return filtered.sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
+}
+function getSearchResults(){
+  const q=state.searchQuery.toLowerCase();
+  if(!q)return[];
+  return state.tasks.filter(t=>
+    t.title.toLowerCase().includes(q)||(t.notes||"").toLowerCase().includes(q)
+  ).slice(0,20);
 }
 const pendingCount=pid=>state.tasks.filter(t=>t.project_id===pid&&!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)&&taskMatchesHotel(t)).length;
 const overdueCount=pid=>state.tasks.filter(t=>t.project_id===pid&&!t.done&&t.deadline&&daysUntil(t.deadline)<0&&taskMatchesHotel(t)).length;
 const urgentCount =pid=>state.tasks.filter(t=>t.project_id===pid&&!t.done&&t.priority==="urgent"&&taskMatchesHotel(t)).length;
 const doneCount   =pid=>state.tasks.filter(t=>t.project_id===pid&&t.done&&taskMatchesHotel(t)).length;
 
-// ── Render ────────────────────────────────────────────────────────────────────
+// ── Login screen ──────────────────────────────────────────────────────────────
+function renderLogin(){
+  const dots=[0,1,2,3].map(i=>`<div class="pin-dot ${i<state.pinInput.length?"filled":""}"></div>`).join("");
+  return`<div class="login-screen">
+    <div class="login-box">
+      <div class="login-logo">📋</div>
+      <div class="login-title">Mis Proyectos</div>
+      <div class="login-sub">Introduce tu PIN de acceso</div>
+      <div class="pin-dots">${dots}</div>
+      <div class="pin-grid">
+        ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map(n=>`
+          <button class="pin-btn" data-pin="${n}" ${n===""?"style='visibility:hidden'":""}>${n}</button>
+        `).join("")}
+      </div>
+      ${state.pinError?`<div class="pin-error">${state.pinError}</div>`:""}
+      <div class="readonly-link" data-action="enterreadonly">Acceso de solo lectura</div>
+    </div>
+  </div>`;
+}
+
+// ── Main render ───────────────────────────────────────────────────────────────
 function render(){
-  const{projects,view,taskFilter,hotelFilter,tags}=state;
+  if(!state.loggedIn){document.getElementById("app").innerHTML=renderLogin();return;}
+  const{projects,view,taskFilter,hotelFilter,tags,searchQuery}=state;
   const ap=proj(state.activeProject);
   const tgOk=state.tgToken&&state.tgChatId;
-  const allTasks=state.tasks.filter(t=>taskMatchesHotel(t));
-  const totalOverdue=allTasks.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length;
+  const allFiltered=state.tasks.filter(t=>taskMatchesHotel(t));
+  const totalOverdue=allFiltered.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length;
+
+  const isSearch=searchQuery.length>0;
 
   document.getElementById("app").innerHTML=`
     ${state.showConfig?configModal():""}
     ${state.showTagManager?tagManagerModal():""}
+    ${state.showDetail?taskDetailModal():""}
+
+    ${state.readonly?`<div class="readonly-banner">👁 Modo lectura — no puedes editar</div>`:""}
 
     <div class="header">
       <div class="header-inner">
@@ -253,9 +388,17 @@ function render(){
           </div>
           <div class="header-actions">
             <span class="status-ok">✅ Supabase</span>
-            <button class="btn-config" data-action="opentagmgr" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.5)">🏷 Hoteles</button>
-            <button class="btn-config ${tgOk?"connected":""}" data-action="openconfig">${tgOk?"✈️ Telegram ✓":"⚙️ Configurar"}</button>
+            <button class="btn-hdr" data-action="opentagmgr">🏷 Hoteles</button>
+            <button class="btn-hdr ${tgOk?"connected":""}" data-action="openconfig">${tgOk?"✈️ Telegram ✓":"⚙️ Config"}</button>
+            ${!state.readonly?`<button class="btn-hdr" data-action="logout" style="color:rgba(255,100,100,0.8)">🔒 Salir</button>`:""}
             ${state.notifications.length>0?`<div class="notif-badge">🔔 ${state.notifications.length}</div>`:""}
+          </div>
+        </div>
+
+        <div class="search-bar" style="padding:0 0 12px">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" placeholder="Buscar tareas…" value="${state.searchQuery}" oninput="state.searchQuery=this.value;render()" data-searchinput>
           </div>
         </div>
 
@@ -263,128 +406,76 @@ function render(){
           <button class="nav-tab ${view==="dashboard"?"active":""}" style="${view==="dashboard"?"color:#F6AD55;border-bottom-color:#F6AD55":""}" data-view="dashboard">
             📊 Dashboard ${totalOverdue>0?`<span style="background:#E53E3E;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px">${totalOverdue}</span>`:""}
           </button>
-          <button class="nav-tab ${view==="tasks"?"active":""}" style="${view==="tasks"?"color:#6B46C1;border-bottom-color:#6B46C1":""}" data-view="tasks">
-            📋 Tareas
-          </button>
+          <button class="nav-tab ${view==="tasks"?"active":""}" style="${view==="tasks"?"color:#6B46C1;border-bottom-color:#6B46C1":""}" data-view="tasks">📋 Tareas</button>
+          <button class="nav-tab ${view==="calendar"?"active":""}" style="${view==="calendar"?"color:#2B6CB0;border-bottom-color:#2B6CB0":""}" data-view="calendar">📅 Calendario</button>
+          <button class="nav-tab ${view==="weekly"?"active":""}" style="${view==="weekly"?"color:#276749;border-bottom-color:#276749":""}" data-view="weekly">📆 Semana</button>
         </div>
 
         ${view==="tasks"?`
         <div class="tabs" style="margin-top:6px">
           ${projects.map(p=>{
-            const cnt=pendingCount(p.id),urg=urgentCount(p.id),active=p.id===state.activeProject;
+            const cnt=pendingCount(p.id),urg=urgentCount(p.id),ovr=overdueCount(p.id),active=p.id===state.activeProject;
             return`<button class="tab ${active?"active":""}" style="color:${active?p.color:"rgba(255,255,255,0.55)"}" data-project="${p.id}" draggable="true" data-dragtab="${p.id}">
               <span class="tab-dot"></span>${p.name}
               ${cnt>0?`<span class="tab-count" style="background:${urg>0?"#E53E3E":p.color}">${cnt}</span>`:""}
-              ${overdueCount(p.id)>0?`<span class="tab-count" style="background:#E53E3E">${overdueCount(p.id)}⚠</span>`:""}
+              ${ovr>0?`<span class="tab-count" style="background:#E53E3E">${ovr}⚠</span>`:""}
               ${active?`<span style="font-size:12px;opacity:0.6" data-editproj="${p.id}">✏️</span>`:""}
             </button>`;
           }).join("")}
-          <button class="tab-add" data-action="newproj">+</button>
+          ${!state.readonly?`<button class="tab-add" data-action="newproj">+</button>`:""}
         </div>`:""}
       </div>
     </div>
 
     <div class="body">
       ${hotelFilterBar()}
-      ${view==="dashboard"?renderDashboard():renderTasks(ap)}
+      ${isSearch?renderSearch():
+        view==="dashboard"?renderDashboard():
+        view==="tasks"?renderTasks(ap):
+        view==="calendar"?renderCalendar():
+        renderWeekly()}
     </div>
   `;
 }
 
+// ── Hotel filter bar ──────────────────────────────────────────────────────────
 function hotelFilterBar(){
   const{tags,hotelFilter}=state;
   if(!tags.length)return"";
   return`<div class="hotel-bar">
-    <span style="font-size:11px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:1px">Filtrar por hotel:</span>
+    <span style="font-size:11px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:1px">Hotel:</span>
     <button class="hotel-btn ${!hotelFilter?"active":""}" data-hotelfilter="0">Todos</button>
     ${tags.map(t=>`<button class="hotel-btn ${hotelFilter===t.id?"active":""}" data-hotelfilter="${t.id}">${t.name}</button>`).join("")}
   </div>`;
 }
 
-function renderCharts(filtered){
-  const{projects,tags,taskTags}=state;
-
-  // ── Chart 1: por pestaña (proyecto) ──
-  const projData=projects.map(p=>{
-    const pt=filtered.filter(t=>t.project_id===p.id);
-    return{
-      name:p.name,color:p.color,projectId:p.id,
-      pending:pt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length,
-      overdue:pt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length,
-      done:pt.filter(t=>t.done).length,
-    };
-  }).filter(p=>p.pending+p.overdue+p.done>0);
-
-  // ── Chart 2: por hotel/tag ──
-  const tagData=tags.map(tg=>{
-    const tids=Object.entries(taskTags).filter(([,tgs])=>tgs.includes(tg.id)).map(([tid])=>Number(tid));
-    const tt=filtered.filter(t=>tids.includes(t.id));
-    return{
-      name:tg.name,projectId:null,
-      pending:tt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length,
-      overdue:tt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length,
-      done:tt.filter(t=>t.done).length,
-    };
-  }).filter(t=>t.pending+t.overdue+t.done>0);
-
-  // ── No data ──
-  if(!projData.length&&!tagData.length) return"";
-
-  function barChart(data,title,onClickKey){
-    if(!data.length)return"";
-    const maxVal=Math.max(...data.map(d=>d.pending+d.overdue+d.done),1);
-    const BAR_H=28,GAP=10,LABEL_W=130,CHART_W=340,ROW=BAR_H+GAP;
-    const svgH=data.length*ROW+20;
-
-    const rows=data.map((d,i)=>{
-      const total=d.pending+d.overdue+d.done;
-      const pW=Math.round((d.pending/maxVal)*CHART_W);
-      const oW=Math.round((d.overdue/maxVal)*CHART_W);
-      const dW=Math.round((d.done/maxVal)*CHART_W);
-      const y=i*ROW;
-      const shortName=d.name.length>18?d.name.slice(0,17)+"…":d.name;
-      const clickAttr=d.projectId?`data-gotoproject="${d.projectId}" style="cursor:pointer"`:"";
-      return`
-        <text x="${LABEL_W-8}" y="${y+BAR_H/2+5}" text-anchor="end" font-size="12" fill="#718096" font-family="Georgia,serif">${shortName}</text>
-        <g ${clickAttr}>
-          ${pW>0?`<rect x="${LABEL_W}" y="${y}" width="${pW}" height="${BAR_H}" rx="3" fill="#6B46C1" opacity="0.85"/>`:``}
-          ${oW>0?`<rect x="${LABEL_W+pW}" y="${y}" width="${oW}" height="${BAR_H}" rx="3" fill="#E53E3E" opacity="0.85"/>`:``}
-          ${dW>0?`<rect x="${LABEL_W+pW+oW}" y="${y}" width="${dW}" height="${BAR_H}" rx="3" fill="#48BB78" opacity="0.85"/>`:``}
-          ${total>0?`<text x="${LABEL_W+pW+oW+dW+6}" y="${y+BAR_H/2+5}" font-size="11" fill="#A0AEC0" font-family="Georgia,serif">${total}</text>`:""}
-        </g>
-      `;
-    }).join("");
-
-    return`
-      <div style="display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap">
-        <span style="font-size:12px;font-weight:700;color:#6B46C1">● Pendientes</span>
-        <span style="font-size:12px;font-weight:700;color:#E53E3E">● Vencidas</span>
-        <span style="font-size:12px;font-weight:700;color:#48BB78">● Hechas</span>
-      </div>
-      <svg width="100%" viewBox="0 0 ${LABEL_W+CHART_W+60} ${svgH}" style="overflow:visible">
-        ${rows}
-      </svg>`;
-  }
-
+// ── Search results ────────────────────────────────────────────────────────────
+function renderSearch(){
+  const results=getSearchResults();
   return`
-    <div class="dash-section">
-      <div class="dash-section-title" style="color:#2D3748"><span style="background:#2D3748"></span>📊 Estadísticas por pestaña</div>
-      <div style="background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #E2E8F0;margin-bottom:12px;overflow-x:auto">
-        ${barChart(projData,"","project")}
-      </div>
-    </div>
-    ${tagData.length>0?`
-    <div class="dash-section">
-      <div class="dash-section-title" style="color:#2D3748"><span style="background:#2D3748"></span>🏷 Estadísticas por hotel</div>
-      <div style="background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #E2E8F0;margin-bottom:12px;overflow-x:auto">
-        ${barChart(tagData,"","tag")}
-      </div>
-    </div>`:""}
-  `;
+    <div class="search-results-banner">🔍 ${results.length} resultado${results.length!==1?"s":""} para "${state.searchQuery}"</div>
+    ${results.length===0?`<div class="empty">Sin resultados.<br><span style="font-size:30px">🔍</span></div>`:""}
+    ${results.map(t=>{
+      const pr=PRIORITIES.find(x=>x.id===t.priority);
+      const p=proj(t.project_id);
+      const dl=dlLabel(t.deadline);
+      return`<div class="task-card" style="border-left:4px solid ${pr.color};cursor:pointer" data-opentask="${t.id}">
+        <div class="task-body">
+          <div style="font-size:10px;color:#A0AEC0;margin-bottom:3px;font-weight:600">${p?.name||""}</div>
+          <div class="task-title ${t.done?"done":""}">${t.title}</div>
+          ${t.notes?`<div class="task-notes">${t.notes}</div>`:""}
+          <div class="task-meta">
+            <span class="priority-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}">${pr.emoji} ${pr.label}</span>
+            ${dl?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${dl.text}</span>`:""}
+          </div>
+        </div>
+      </div>`;
+    }).join("")}`;
 }
 
+// ── Dashboard ─────────────────────────────────────────────────────────────────
 function renderDashboard(){
-  const{tasks,projects}=state;
+  const{tasks,projects,tags,taskTags}=state;
   const filtered=tasks.filter(t=>taskMatchesHotel(t));
   const overdue  =filtered.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0);
   const completed=filtered.filter(t=>t.done);
@@ -396,7 +487,7 @@ function renderDashboard(){
     const pPend=pt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length;
     const pDone=pt.filter(t=>t.done).length;
     const pOvr =pt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length;
-    return`<div class="proj-card" style="border-color:${p.color}22;cursor:pointer" data-gotoproject="${p.id}">
+    return`<div class="proj-card" style="border-color:${p.color}33" data-gotoproject="${p.id}">
       <div class="proj-color-bar" style="background:${p.color}"></div>
       <div>
         <div class="proj-name">${p.name}</div>
@@ -405,26 +496,73 @@ function renderDashboard(){
     </div>`;
   }).join("");
 
-  function dashRow(t,showDl=true){
+  function dashRow(t){
     const pr=PRIORITIES.find(x=>x.id===t.priority);
     const p=proj(t.project_id);
     const dl=dlLabel(t.deadline);
-    const tids=state.taskTags[t.id]||[];
-    const taskTags=tids.map(tid=>state.tags.find(x=>x.id===tid)).filter(Boolean);
-    return`<div class="dash-task" style="cursor:pointer" data-gotoproject="${t.project_id}">
+    const tids=taskTags[t.id]||[];
+    const tTags=tids.map(tid=>tags.find(x=>x.id===tid)).filter(Boolean);
+    return`<div class="dash-task" data-gotoproject="${t.project_id}" data-opentask="${t.id}">
       <div class="dash-task-left">
         <div class="dash-task-name">${t.title}</div>
         <div class="dash-task-meta">
           <span>${p?.name||""}</span>
           ${t.notes?`<span>· ${t.notes}</span>`:""}
-          ${taskTags.map(tg=>`<span class="tag-pill">${tg.name}</span>`).join("")}
+          ${tTags.map(tg=>`<span class="tag-pill">${tg.name}</span>`).join("")}
         </div>
       </div>
       <div class="dash-task-right">
         <span class="dash-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}">${pr.emoji} ${pr.label}</span>
-        ${showDl&&t.deadline?`<span class="dash-badge" style="background:${dl?.urgent?"#FFF5F5":"#F7FAFC"};color:${dl?.color||"#718096"};border-color:${dl?.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${fmtDate(t.deadline)}</span>`:""}
+        ${t.deadline?`<span class="dash-badge" style="background:${dl?.urgent?"#FFF5F5":"#F7FAFC"};color:${dl?.color||"#718096"};border-color:${dl?.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${fmtDate(t.deadline)}</span>`:""}
       </div>
     </div>`;
+  }
+
+  // Charts
+  const projData=projects.map(p=>{
+    const pt=filtered.filter(t=>t.project_id===p.id);
+    return{name:p.name,projectId:p.id,
+      pending:pt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length,
+      overdue:pt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length,
+      done:pt.filter(t=>t.done).length};
+  }).filter(d=>d.pending+d.overdue+d.done>0);
+  const tagData=tags.map(tg=>{
+    const tids=Object.entries(taskTags).filter(([,tgs])=>tgs.includes(tg.id)).map(([tid])=>Number(tid));
+    const tt=filtered.filter(t=>tids.includes(t.id));
+    return{name:tg.name,projectId:null,
+      pending:tt.filter(t=>!t.done&&!(t.deadline&&daysUntil(t.deadline)<0)).length,
+      overdue:tt.filter(t=>!t.done&&t.deadline&&daysUntil(t.deadline)<0).length,
+      done:tt.filter(t=>t.done).length};
+  }).filter(d=>d.pending+d.overdue+d.done>0);
+
+  function barChart(data){
+    if(!data.length)return"";
+    const maxVal=Math.max(...data.map(d=>d.pending+d.overdue+d.done),1);
+    const BAR_H=26,GAP=10,LW=140,CW=320,ROW=BAR_H+GAP;
+    const svgH=data.length*ROW;
+    const rows=data.map((d,i)=>{
+      const total=d.pending+d.overdue+d.done;
+      const pW=Math.round((d.pending/maxVal)*CW);
+      const oW=Math.round((d.overdue/maxVal)*CW);
+      const dW=Math.round((d.done/maxVal)*CW);
+      const y=i*ROW;
+      const name=d.name.length>20?d.name.slice(0,19)+"…":d.name;
+      const click=d.projectId?`data-gotoproject="${d.projectId}" style="cursor:pointer"`:"";
+      return`
+        <text x="${LW-8}" y="${y+BAR_H/2+5}" text-anchor="end" font-size="12" fill="#718096" font-family="Georgia,serif">${name}</text>
+        <g ${click}>
+          ${pW>0?`<rect x="${LW}" y="${y}" width="${pW}" height="${BAR_H}" rx="3" fill="#6B46C1" opacity="0.85"/>`:""}
+          ${oW>0?`<rect x="${LW+pW}" y="${y}" width="${oW}" height="${BAR_H}" rx="3" fill="#E53E3E" opacity="0.85"/>`:""}
+          ${dW>0?`<rect x="${LW+pW+oW}" y="${y}" width="${dW}" height="${BAR_H}" rx="3" fill="#48BB78" opacity="0.85"/>`:""}
+          ${total>0?`<text x="${LW+pW+oW+dW+6}" y="${y+BAR_H/2+5}" font-size="11" fill="#A0AEC0" font-family="Georgia,serif">${total}</text>`:""}
+        </g>`;
+    }).join("");
+    return`<div style="display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:700;color:#6B46C1">● Pendientes</span>
+      <span style="font-size:12px;font-weight:700;color:#E53E3E">● Vencidas</span>
+      <span style="font-size:12px;font-weight:700;color:#48BB78">● Hechas</span>
+    </div>
+    <svg width="100%" viewBox="0 0 ${LW+CW+60} ${svgH}" style="overflow:visible">${rows}</svg>`;
   }
 
   return`
@@ -436,7 +574,17 @@ function renderDashboard(){
 
     <div class="proj-summary">${projSummary}</div>
 
-    ${renderCharts(filtered)}
+    ${projData.length>0?`
+    <div class="dash-section">
+      <div class="dash-section-title" style="color:#2D3748"><span style="background:#2D3748"></span>📊 Por pestaña</div>
+      <div style="background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #E2E8F0;overflow-x:auto">${barChart(projData)}</div>
+    </div>`:""}
+
+    ${tagData.length>0?`
+    <div class="dash-section">
+      <div class="dash-section-title" style="color:#2D3748"><span style="background:#2D3748"></span>🏷 Por hotel</div>
+      <div style="background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #E2E8F0;overflow-x:auto">${barChart(tagData)}</div>
+    </div>`:""}
 
     ${overdue.length>0?`
     <div class="dash-section">
@@ -452,7 +600,7 @@ function renderDashboard(){
     <div class="dash-section">
       <div class="dash-section-title" style="color:#276749"><span style="background:#276749"></span>✅ Últimas completadas</div>
       ${completed.length>0?completed.slice(-6).reverse().map(t=>`
-        <div class="dash-task" style="opacity:0.7">
+        <div class="dash-task" style="opacity:0.7" data-gotoproject="${t.project_id}">
           <div class="dash-task-left">
             <div class="dash-task-name" style="text-decoration:line-through;color:#A0AEC0">${t.title}</div>
             <div class="dash-task-meta"><span>${proj(t.project_id)?.name||""}</span></div>
@@ -462,11 +610,105 @@ function renderDashboard(){
     </div>`;
 }
 
+// ── Calendar ──────────────────────────────────────────────────────────────────
+function renderCalendar(){
+  const{calYear,calMonth,tasks}=state;
+  const firstDay=new Date(calYear,calMonth,1);
+  const lastDay=new Date(calYear,calMonth+1,0);
+  // Monday-based
+  let startDow=(firstDay.getDay()+6)%7;
+  const cells=[];
+  for(let i=0;i<startDow;i++){
+    const d=new Date(calYear,calMonth,1-startDow+i);
+    cells.push({date:d,current:false});
+  }
+  for(let d=1;d<=lastDay.getDate();d++) cells.push({date:new Date(calYear,calMonth,d),current:true});
+  while(cells.length%7!==0) cells.push({date:new Date(calYear,calMonth+1,cells.length-startDow-lastDay.getDate()+1),current:false});
+
+  const today=new Date();today.setHours(0,0,0,0);
+
+  const tasksByDate={};
+  tasks.filter(t=>t.deadline&&!t.done).forEach(t=>{
+    if(!tasksByDate[t.deadline])tasksByDate[t.deadline]=[];
+    tasksByDate[t.deadline].push(t);
+  });
+
+  return`
+    <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #E2E8F0">
+      <div class="cal-header">
+        <button class="cal-nav" data-action="calprev">◀</button>
+        <div class="cal-title">${MONTHS[calMonth]} ${calYear}</div>
+        <button class="cal-nav" data-action="calnext">▶</button>
+      </div>
+      <div class="cal-grid">
+        ${DAYS.map(d=>`<div class="cal-day-name">${d}</div>`).join("")}
+        ${cells.map(({date,current})=>{
+          const iso=date.toISOString().split("T")[0];
+          const isToday=date.getTime()===today.getTime();
+          const dayTasks=tasksByDate[iso]||[];
+          return`<div class="cal-day ${isToday?"today":""} ${!current?"other-month":""}">
+            <div class="cal-day-num">${date.getDate()}</div>
+            ${dayTasks.slice(0,3).map(t=>{
+              const pr=PRIORITIES.find(x=>x.id===t.priority);
+              return`<div class="cal-task-dot" style="background:${pr.bg};color:${pr.color};border-left:2px solid ${pr.color}" data-opentask="${t.id}" title="${t.title}">${t.title}</div>`;
+            }).join("")}
+            ${dayTasks.length>3?`<div style="font-size:10px;color:#A0AEC0">+${dayTasks.length-3} más</div>`:""}
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+
+// ── Weekly view ───────────────────────────────────────────────────────────────
+function renderWeekly(){
+  const{tasks,weekOffset}=state;
+  const today=new Date();today.setHours(0,0,0,0);
+  const monday=new Date(today);
+  monday.setDate(today.getDate()-((today.getDay()+6)%7)+weekOffset*7);
+
+  const days=Array.from({length:7},(_,i)=>{
+    const d=new Date(monday);d.setDate(monday.getDate()+i);return d;
+  });
+
+  const tasksByDate={};
+  tasks.filter(t=>t.deadline&&!t.done).forEach(t=>{
+    if(!tasksByDate[t.deadline])tasksByDate[t.deadline]=[];
+    tasksByDate[t.deadline].push(t);
+  });
+
+  const startStr=days[0].toLocaleDateString("es-ES",{day:"numeric",month:"short"});
+  const endStr=days[6].toLocaleDateString("es-ES",{day:"numeric",month:"short"});
+
+  return`
+    <div class="week-header">
+      <button class="cal-nav" data-action="weekprev">◀</button>
+      <div class="cal-title">${startStr} — ${endStr}</div>
+      <button class="cal-nav" data-action="weeknext">▶</button>
+    </div>
+    <div class="week-cols">
+      ${days.map(d=>{
+        const iso=d.toISOString().split("T")[0];
+        const isToday=d.getTime()===today.getTime();
+        const dayTasks=tasksByDate[iso]||[];
+        return`<div class="week-col">
+          <div class="week-col-header ${isToday?"today":""}">
+            <div>${DAYS[days.indexOf(d)]}</div>
+            <div style="font-size:16px;font-weight:700">${d.getDate()}</div>
+          </div>
+          ${dayTasks.map(t=>{
+            const pr=PRIORITIES.find(x=>x.id===t.priority);
+            return`<div class="week-task" style="background:${pr.bg};border-color:${pr.color}" data-opentask="${t.id}" title="${t.title}">${t.title}</div>`;
+          }).join("")}
+          ${dayTasks.length===0?`<div style="font-size:11px;color:#CBD5E0;text-align:center;padding:8px">—</div>`:""}
+        </div>`;
+      }).join("")}
+    </div>`;
+}
+
+// ── Tasks view ────────────────────────────────────────────────────────────────
 function renderTasks(ap){
   const{taskFilter,projects}=state;
   const projTasks=getProjectTasks();
-  const overdueC=pid=>state.tasks.filter(t=>t.project_id===pid&&!t.done&&t.deadline&&daysUntil(t.deadline)<0&&taskMatchesHotel(t)).length;
-
   return`
     ${state.showEditProj?editProjForm():""}
     ${state.showProjForm?newProjForm():""}
@@ -478,40 +720,116 @@ function renderTasks(ap){
         <button class="filter-btn" style="${taskFilter==="overdue"?"background:#E53E3E;border-color:#E53E3E;color:#fff":""}" data-filter="overdue">Vencidas (${overdueCount(ap.id)})</button>
         <button class="filter-btn" style="${taskFilter==="done"?"background:#48BB78;border-color:#48BB78;color:#fff":""}" data-filter="done">Hechas (${doneCount(ap.id)})</button>
       </div>
-      ${projects.length>1?`<button class="btn-danger" data-deleteproj="${ap.id}">🗑 Eliminar</button>`:""}
+      ${!state.readonly&&projects.length>1?`<button class="btn-danger" data-deleteproj="${ap.id}">🗑 Eliminar</button>`:""}
     </div>`:""}
 
     ${projTasks.length===0&&!state.showTaskForm?`
-      <div class="empty">${taskFilter==="done"?"Ninguna tarea completada aún.":taskFilter==="overdue"?"Sin tareas vencidas. 🎉":"Sin tareas pendientes. 🎉"}<br><span style="font-size:30px">📋</span></div>`:""}
+      <div class="empty">${taskFilter==="done"?"Ninguna completada.":taskFilter==="overdue"?"Sin vencidas. 🎉":"Sin pendientes. 🎉"}<br><span style="font-size:30px">📋</span></div>`:""}
 
     ${projTasks.map(t=>state.showEditTask===t.id?editTaskCard(t):taskCard(t)).join("")}
 
-    ${taskFilter==="pending"?(state.showTaskForm?newTaskForm(ap):`
+    ${!state.readonly&&taskFilter==="pending"?(state.showTaskForm?newTaskForm(ap):`
       <button class="btn-add-task" style="background:${ap?.color||"#6B46C1"};box-shadow:0 4px 16px ${ap?.color||"#6B46C1"}55" data-action="addtask">
         + Añadir tarea a ${ap?.name||""}
       </button>`):""}
   `;
 }
 
-// ── Component templates ───────────────────────────────────────────────────────
-function tagSelector(selectedIds,target){
-  return`<div class="tags-section">
-    <label class="label">🏷 Hoteles afectados</label>
-    <div class="tags-list">
-      ${state.tags.map(t=>`<button class="tag-chip ${selectedIds.includes(t.id)?"selected":""}" data-tagtoggle="${t.id}" data-tagtarget="${target}">${t.name}</button>`).join("")}
+// ── Task detail modal ─────────────────────────────────────────────────────────
+function taskDetailModal(){
+  const tid=state.showDetail;
+  const t=state.tasks.find(x=>x.id===tid);
+  if(!t)return"";
+  const pr=PRIORITIES.find(x=>x.id===t.priority);
+  const dl=dlLabel(t.deadline);
+  const p=proj(t.project_id);
+  const subs=state.subtasks[tid]||[];
+  const comms=state.comments[tid]||[];
+  const atts=state.attachments[tid]||[];
+  const tids=(state.taskTags[tid]||[]).map(id=>state.tags.find(x=>x.id===id)).filter(Boolean);
+  const doneSubCount=subs.filter(s=>s.done).length;
+
+  return`<div class="modal-overlay" data-action="closedetail">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div style="flex:1">
+          <div style="font-size:11px;color:#A0AEC0;font-weight:600;margin-bottom:4px">${p?.name||""}</div>
+          <div style="font-size:17px;font-weight:700;color:#1A202C;line-height:1.3">${t.title}</div>
+        </div>
+        <button style="background:none;border:none;font-size:22px;color:#A0AEC0;padding:0;margin-left:8px" data-action="closedetail">×</button>
+      </div>
+
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+        <span class="priority-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}">${pr.emoji} ${pr.label}</span>
+        ${dl?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${fmtDate(t.deadline)}</span>`:""}
+        ${t.recurrence?`<span class="rec-badge">🔄 ${RECURRENCE.find(r=>r.id===t.recurrence)?.label||t.recurrence}</span>`:""}
+        ${tids.map(tg=>`<span class="tag-pill">${tg.name}</span>`).join("")}
+      </div>
+
+      ${t.notes?`<div style="font-size:13px;color:#718096;line-height:1.5;margin-bottom:14px;padding:10px 12px;background:#F7F8FC;border-radius:8px">${t.notes}</div>`:""}
+
+      <!-- Subtareas -->
+      <div class="section-label">✅ Subtareas ${subs.length>0?`(${doneSubCount}/${subs.length})`:""}</div>
+      ${subs.map(s=>`
+        <div class="subtask-item">
+          <button class="subtask-check ${s.done?"done":""}" data-togglesubtask="${s.id}">${s.done?"✓":""}</button>
+          <span class="subtask-title ${s.done?"done":""}">${s.title}</span>
+          ${!state.readonly?`<button style="background:none;border:none;color:#CBD5E0;font-size:14px;cursor:pointer" data-deletesubtask="${s.id}">×</button>`:""}
+        </div>`).join("")}
+      ${!state.readonly?`<div style="display:flex;gap:6px;margin-top:8px">
+        <input class="input-sm" style="flex:1" placeholder="Nueva subtarea…" value="${state.newSubtask}" oninput="state.newSubtask=this.value" onkeydown="if(event.key==='Enter')addSubtask(${tid})">
+        <button class="btn-sm btn-primary" style="background:#6B46C1" data-addsubtask="${tid}">+</button>
+      </div>`:""}
+
+      <!-- Comentarios -->
+      <div class="section-label">💬 Comentarios</div>
+      ${comms.map(c=>`
+        <div class="comment-item">
+          <div class="comment-text">${c.text}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="comment-date">${new Date(c.created_at).toLocaleString("es-ES")}</div>
+            ${!state.readonly?`<button style="background:none;border:none;color:#CBD5E0;font-size:12px;cursor:pointer" data-deletecomment="${c.id}">Eliminar</button>`:""}
+          </div>
+        </div>`).join("")}
+      ${!state.readonly?`<div style="display:flex;gap:6px;margin-top:8px">
+        <input class="input-sm" style="flex:1" placeholder="Añadir comentario…" value="${state.newComment}" oninput="state.newComment=this.value" onkeydown="if(event.key==='Enter')addComment(${tid})">
+        <button class="btn-sm btn-primary" style="background:#2B6CB0" data-addcomment="${tid}">+</button>
+      </div>`:""}
+
+      <!-- Adjuntos -->
+      <div class="section-label">📎 Adjuntos</div>
+      ${atts.map(a=>`
+        <div class="attachment-item">
+          <span>📎</span>
+          <a class="attachment-link" href="${a.url}" target="_blank">${a.label||a.url}</a>
+          ${!state.readonly?`<button style="background:none;border:none;color:#CBD5E0;font-size:14px;cursor:pointer" data-deleteattachment="${a.id}">×</button>`:""}
+        </div>`).join("")}
+      ${!state.readonly?`<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <input class="input-sm" style="flex:1;min-width:100px" placeholder="Etiqueta" value="${state.newAttachLabel}" oninput="state.newAttachLabel=this.value">
+        <input class="input-sm" style="flex:2;min-width:140px" placeholder="URL (https://…)" value="${state.newAttachUrl}" oninput="state.newAttachUrl=this.value" onkeydown="if(event.key==='Enter')addAttachment(${tid})">
+        <button class="btn-sm btn-primary" style="background:#276749" data-addattachment="${tid}">+</button>
+      </div>`:""}
+
+      <div style="margin-top:18px;display:flex;gap:8px">
+        ${!state.readonly?`<button class="btn-primary" style="background:${proj(t.project_id)?.color||'#6B46C1'}" data-editfromdetail="${tid}">✏️ Editar</button>`:""}
+        <button class="btn-secondary" data-action="closedetail">Cerrar</button>
+      </div>
     </div>
   </div>`;
 }
 
+// ── Task card ─────────────────────────────────────────────────────────────────
 function taskCard(t){
   const pr=PRIORITIES.find(x=>x.id===t.priority);
   const dl=dlLabel(t.deadline);
   const tids=state.taskTags[t.id]||[];
-  const taskTags=tids.map(tid=>state.tags.find(x=>x.id===tid)).filter(Boolean);
-  return`<div class="task-card ${t.done?"done":""}" style="border-left:4px solid ${t.done?"#CBD5E0":pr.color}" draggable="true" data-dragtask="${t.id}">
-    <span class="drag-handle" title="Arrastrar">⠿</span>
+  const tTags=tids.map(tid=>state.tags.find(x=>x.id===tid)).filter(Boolean);
+  const subs=state.subtasks[t.id]||[];
+  const doneSubs=subs.filter(s=>s.done).length;
+  return`<div class="task-card ${t.done?"done":""}" style="border-left:4px solid ${t.done?"#CBD5E0":pr.color}" draggable="${!state.readonly}" data-dragtask="${t.id}">
+    ${!state.readonly?`<span class="drag-handle" title="Arrastrar">⠿</span>`:""}
     <button class="task-checkbox ${t.done?"checked":""}" style="border-color:${t.done?"#48BB78":pr.color}" data-toggledone="${t.id}">${t.done?"✓":""}</button>
-    <div class="task-body">
+    <div class="task-body" style="cursor:pointer" data-opentask="${t.id}">
       <div class="task-title ${t.done?"done":""}">${t.title}</div>
       ${t.notes?`<div class="task-notes">${t.notes}</div>`:""}
       <div class="task-meta">
@@ -522,28 +840,52 @@ function taskCard(t){
           </div>
         </div>`:""}
         ${dl&&!t.done?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${dl.text}</span>`:""}
+        ${t.recurrence?`<span class="rec-badge">🔄 ${RECURRENCE.find(r=>r.id===t.recurrence)?.label||""}</span>`:""}
+        ${subs.length>0?`<span style="font-size:11px;color:#718096">☑ ${doneSubs}/${subs.length}</span>`:""}
       </div>
-      ${taskTags.length>0?`<div class="task-tags">${taskTags.map(tg=>`<span class="tag-pill">${tg.name}</span>`).join("")}</div>`:""}
+      ${tTags.length>0?`<div class="task-tags">${tTags.map(tg=>`<span class="tag-pill">${tg.name}</span>`).join("")}</div>`:""}
     </div>
-    <div class="task-actions">
-      ${!t.done?`<button class="btn-icon" data-edittask="${t.id}">✏️</button>`:""}
+    ${!state.readonly?`<div class="task-actions">
+      <button class="btn-icon" data-edittask="${t.id}">✏️</button>
       <button class="btn-delete" data-deletetask="${t.id}">×</button>
+    </div>`:""}
+  </div>`;
+}
+
+// ── Tag selector ──────────────────────────────────────────────────────────────
+function tagSelector(selectedIds,target){
+  return`<div class="tags-section">
+    <label class="label">🏷 Hoteles afectados</label>
+    <div class="tags-list">
+      ${state.tags.map(t=>`<button class="tag-chip ${selectedIds.includes(t.id)?"selected":""}" data-tagtoggle="${t.id}" data-tagtarget="${target}">${t.name}</button>`).join("")}
     </div>
   </div>`;
 }
 
+function recurrenceSelector(current,target){
+  return`<div style="margin-bottom:12px">
+    <label class="label">🔄 Recurrencia</label>
+    <div class="recurrence-row">
+      <button class="rec-btn ${!current?"active":""}" data-setrec="none" data-rectarget="${target}">Sin repetir</button>
+      ${RECURRENCE.map(r=>`<button class="rec-btn ${current===r.id?"active":""}" data-setrec="${r.id}" data-rectarget="${target}">${r.label}</button>`).join("")}
+    </div>
+  </div>`;
+}
+
+// ── Edit task card ────────────────────────────────────────────────────────────
 function editTaskCard(t){
   const{editTask}=state;const ap=proj(state.activeProject);
   return`<div class="card" style="border-color:${ap?.color||"#6B46C1"}">
     <div style="font-size:12px;font-weight:700;color:${ap?.color};text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">✏️ Editando tarea</div>
-    <input class="input" value="${editTask.title.replace(/"/g,'&quot;')}" oninput="state.editTask.title=this.value" onkeydown="if(event.key==='Enter')saveEditTask()">
-    <input class="input input-notes" placeholder="Notas (opcional)" value="${(editTask.notes||"").replace(/"/g,'&quot;')}" oninput="state.editTask.notes=this.value">
+    <input class="input" value="${(editTask.title||"").replace(/"/g,'&quot;')}" oninput="state.editTask.title=this.value" onkeydown="if(event.key==='Enter')saveEditTask()">
+    <textarea class="textarea" placeholder="Notas (opcional)" oninput="state.editTask.notes=this.value">${editTask.notes||""}</textarea>
     <label class="label">📅 Fecha límite</label>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
       <input type="date" class="input-sm" value="${editTask.deadline||""}" oninput="state.editTask.deadline=this.value">
-      ${editTask.deadline?`<button style="font-size:11px;color:#FC8181;background:none;border:1px solid #FED7D7;border-radius:6px;padding:4px 8px" data-action="cleardeadline">Quitar fecha</button>`:""}
+      ${editTask.deadline?`<button style="font-size:11px;color:#FC8181;background:none;border:1px solid #FED7D7;border-radius:6px;padding:4px 8px" data-action="cleardeadline">Quitar</button>`:""}
     </div>
     <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${editTask.priority===p.id?p.color:p.border};background:${editTask.priority===p.id?p.bg:"transparent"};color:${p.color}" data-formpriority="${p.id}" data-target="edittask">${p.emoji} ${p.label}</button>`).join("")}</div>
+    ${recurrenceSelector(editTask.recurrence,"edittask")}
     ${tagSelector(editTask.tagIds||[],"edittask")}
     <div class="btn-row">
       <button class="btn-primary" style="background:${ap?.color||"#6B46C1"}" data-action="saveedittask">Guardar</button>
@@ -552,15 +894,17 @@ function editTaskCard(t){
   </div>`;
 }
 
+// ── New task form ─────────────────────────────────────────────────────────────
 function newTaskForm(ap){
   const{newTask}=state;
   return`<div class="card" style="border-color:${ap?.color||"#6B46C1"};margin-top:8px">
     <div style="font-weight:700;color:${ap?.color};font-size:14px;margin-bottom:14px">Nueva tarea — ${ap?.name||""}</div>
-    <input class="input" placeholder="¿Qué hay que hacer?" value="${newTask.title.replace(/"/g,'&quot;')}" oninput="state.newTask.title=this.value" onkeydown="if(event.key==='Enter')addTask()">
-    <input class="input input-notes" placeholder="Notas (opcional)" value="${(newTask.notes||"").replace(/"/g,'&quot;')}" oninput="state.newTask.notes=this.value">
+    <input class="input" placeholder="¿Qué hay que hacer?" value="${(newTask.title||"").replace(/"/g,'&quot;')}" oninput="state.newTask.title=this.value" onkeydown="if(event.key==='Enter')addTask()">
+    <textarea class="textarea" placeholder="Notas (opcional)" oninput="state.newTask.notes=this.value">${newTask.notes||""}</textarea>
     <label class="label">📅 Fecha límite</label>
     <input type="date" class="input-sm" value="${newTask.deadline||""}" oninput="state.newTask.deadline=this.value" style="margin-bottom:12px">
     <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${newTask.priority===p.id?p.color:p.border};background:${newTask.priority===p.id?p.bg:"transparent"};color:${p.color}" data-formpriority="${p.id}" data-target="newtask">${p.emoji} ${p.label}</button>`).join("")}</div>
+    ${recurrenceSelector(newTask.recurrence,"newtask")}
     ${tagSelector(newTask.tagIds||[],"newtask")}
     <div class="btn-row">
       <button class="btn-primary" style="background:${ap?.color||"#6B46C1"}" data-action="addtaskconfirm">Añadir tarea</button>
@@ -569,24 +913,24 @@ function newTaskForm(ap){
   </div>`;
 }
 
+// ── Project forms ─────────────────────────────────────────────────────────────
 function editProjForm(){
   const{editProj}=state;
   return`<div class="card" style="border-color:${editProj.color}">
     <div class="card-title">✏️ Editar proyecto</div>
-    <input class="input" value="${editProj.name.replace(/"/g,'&quot;')}" oninput="state.editProj.name=this.value" onkeydown="if(event.key==='Enter')saveEditProj()">
+    <input class="input" value="${(editProj.name||"").replace(/"/g,'&quot;')}" oninput="state.editProj.name=this.value" onkeydown="if(event.key==='Enter')saveEditProj()">
     <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${editProj.color===c?" selected":""}" style="background:${c}" data-color="${c}" data-target="editproj"></button>`).join("")}</div>
     <div class="btn-row">
-      <button class="btn-primary" style="background:${editProj.color}" data-action="saveeditproj">Guardar cambios</button>
+      <button class="btn-primary" style="background:${editProj.color}" data-action="saveeditproj">Guardar</button>
       <button class="btn-secondary" data-action="canceleditproj">Cancelar</button>
     </div>
   </div>`;
 }
-
 function newProjForm(){
   const{newProj}=state;
   return`<div class="card">
     <div class="card-title">Nuevo proyecto</div>
-    <input class="input" placeholder="Nombre del proyecto" value="${newProj.name.replace(/"/g,'&quot;')}" oninput="state.newProj.name=this.value" onkeydown="if(event.key==='Enter')addProject()">
+    <input class="input" placeholder="Nombre del proyecto" value="${(newProj.name||"").replace(/"/g,'&quot;')}" oninput="state.newProj.name=this.value" onkeydown="if(event.key==='Enter')addProject()">
     <div class="color-picker">${PROJECT_COLORS.map(c=>`<button class="color-dot${newProj.color===c?" selected":""}" style="background:${c}" data-color="${c}" data-target="newproj"></button>`).join("")}</div>
     <div class="btn-row">
       <button class="btn-primary" style="background:#2D3748" data-action="addproject">Crear</button>
@@ -595,16 +939,23 @@ function newProjForm(){
   </div>`;
 }
 
+// ── Config & tag modals ───────────────────────────────────────────────────────
 function configModal(){
   return`<div class="modal-overlay">
     <div class="modal">
-      <p style="font-weight:700;font-size:16px;color:#2D3748;margin-bottom:4px">⚙️ Configuración Telegram</p>
-      <p style="font-size:12px;color:#718096;margin-bottom:20px">Introduce tus datos para recibir notificaciones en el móvil.</p>
+      <p style="font-weight:700;font-size:16px;color:#2D3748;margin-bottom:4px">⚙️ Configuración</p>
+
+      <p style="font-size:12px;font-weight:700;color:#4A5568;margin:16px 0 8px">🔒 PIN de acceso</p>
+      <input class="input" type="password" placeholder="PIN actual" id="cur-pin" style="margin-bottom:6px">
+      <input class="input" type="password" placeholder="Nuevo PIN (4 dígitos)" id="new-pin" style="margin-bottom:6px">
+      <button class="btn-secondary" style="margin-bottom:16px;width:100%" data-action="changepin">Cambiar PIN</button>
+
+      <p style="font-size:12px;font-weight:700;color:#4A5568;margin-bottom:8px">✈️ Telegram</p>
       <label class="label">Token del bot</label>
       <input class="input" type="password" placeholder="1234567890:AAF..." value="${state.tgToken}" oninput="state.tgToken=this.value">
       <label class="label">Chat ID</label>
       <input class="input" placeholder="123456789" value="${state.tgChatId}" oninput="state.tgChatId=this.value">
-      <p style="font-size:11px;color:#A0AEC0;margin-bottom:18px">Obtén el token con @BotFather y el Chat ID con @userinfobot en Telegram.</p>
+      <p style="font-size:11px;color:#A0AEC0;margin-bottom:18px">Token con @BotFather · Chat ID con @userinfobot</p>
       <div class="btn-row">
         <button class="btn-primary" style="background:#2D3748" data-action="saveconfig">Guardar y probar</button>
         <button class="btn-secondary" data-action="closeconfig">Cancelar</button>
@@ -612,22 +963,20 @@ function configModal(){
     </div>
   </div>`;
 }
-
 function tagManagerModal(){
   return`<div class="modal-overlay">
     <div class="modal">
-      <p style="font-weight:700;font-size:16px;color:#2D3748;margin-bottom:4px">🏷 Gestionar hoteles / tags</p>
-      <p style="font-size:12px;color:#718096;margin-bottom:16px">Añade o elimina los hoteles que quieres usar como etiquetas.</p>
+      <p style="font-weight:700;font-size:16px;color:#2D3748;margin-bottom:4px">🏷 Hoteles / Tags</p>
       <div style="margin-bottom:16px">
         ${state.tags.map(t=>`
           <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#F7F8FC;border-radius:8px;margin-bottom:6px">
             <span style="font-size:13px;font-weight:600;color:#2D3748">${t.name}</span>
-            <button data-deletetag="${t.id}" style="background:none;border:none;color:#FC8181;font-size:18px;cursor:pointer;padding:0;line-height:1">×</button>
+            <button data-deletetag="${t.id}" style="background:none;border:none;color:#FC8181;font-size:18px;cursor:pointer;padding:0">×</button>
           </div>`).join("")}
       </div>
       <label class="label">Nuevo hotel / tag</label>
       <div style="display:flex;gap:8px;margin-bottom:16px">
-        <input class="input" style="margin-bottom:0;flex:1" placeholder="Ej: Krystal Grand Monterrey" value="${state.newTagName}" oninput="state.newTagName=this.value" onkeydown="if(event.key==='Enter')addTag()">
+        <input class="input" style="margin-bottom:0;flex:1" placeholder="Ej: KG Monterrey" value="${state.newTagName}" oninput="state.newTagName=this.value" onkeydown="if(event.key==='Enter')addTag()">
         <button class="btn-primary" style="background:#2D3748;flex:none;padding:9px 16px" data-action="addtag">Añadir</button>
       </div>
       <button class="btn-secondary" style="width:100%" data-action="closetagmgr">Cerrar</button>
@@ -648,156 +997,26 @@ function renderToasts(){
     </div>`).join("");
 }
 
-
-// ── Drag & Drop ───────────────────────────────────────────────────────────────
-let dragSrc=null;
-
-document.addEventListener("dragstart",function(e){
-  const card=e.target.closest("[data-dragtask]");
-  if(!card)return;
-  dragSrc=Number(card.dataset.dragtask);
-  state.dragTaskId=dragSrc;
-  setTimeout(()=>card.classList.add("dragging"),0);
-  e.dataTransfer.effectAllowed="move";
-  e.dataTransfer.setData("text/plain",dragSrc);
-  document.getElementById("drop-hint").classList.add("visible");
-});
-
-document.addEventListener("dragend",function(e){
-  const card=e.target.closest("[data-dragtask]");
-  if(card)card.classList.remove("dragging");
-  document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
-  document.querySelectorAll(".drop-target").forEach(el=>el.classList.remove("drop-target"));
-  document.getElementById("drop-hint").classList.remove("visible");
-  dragSrc=null;state.dragTaskId=null;
-});
-
-document.addEventListener("dragover",function(e){
-  e.preventDefault();
-  // Over a task card — reorder
-  const card=e.target.closest("[data-dragtask]");
-  if(card&&Number(card.dataset.dragtask)!==dragSrc){
-    document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
-    card.classList.add("drag-over");
-  }
-  // Over a tab — highlight
-  const tab=e.target.closest("[data-project]");
-  if(tab){
-    document.querySelectorAll(".drop-target").forEach(el=>el.classList.remove("drop-target"));
-    tab.classList.add("drop-target");
-  }
-});
-
-document.addEventListener("dragleave",function(e){
-  const card=e.target.closest("[data-dragtask]");
-  if(card)card.classList.remove("drag-over");
-  const tab=e.target.closest("[data-project]");
-  if(tab&&!tab.contains(e.relatedTarget))tab.classList.remove("drop-target");
-});
-
-document.addEventListener("drop",function(e){
-  e.preventDefault();
-  if(dragSrc===null)return;
-  const targetCard=e.target.closest("[data-dragtask]");
-  const targetTab=e.target.closest("[data-project]");
-
-  if(targetCard&&Number(targetCard.dataset.dragtask)!==dragSrc){
-    // Reorder within project
-    reorderTasks(dragSrc,Number(targetCard.dataset.dragtask));
-  } else if(targetTab){
-    const newProjId=Number(targetTab.dataset.project);
-    moveTaskToProject(dragSrc,newProjId);
-  }
-  document.querySelectorAll(".drag-over,.drop-target").forEach(el=>{el.classList.remove("drag-over");el.classList.remove("drop-target");});
-  document.getElementById("drop-hint").classList.remove("visible");
-  dragSrc=null;state.dragTaskId=null;
-});
-
-async function reorderTasks(srcId,targetId){
-  const tasks=[...state.tasks];
-  const srcIdx=tasks.findIndex(t=>t.id===srcId);
-  const tgtIdx=tasks.findIndex(t=>t.id===targetId);
-  if(srcIdx===-1||tgtIdx===-1)return;
-  const[moved]=tasks.splice(srcIdx,1);
-  tasks.splice(tgtIdx,0,moved);
-  // Reassign sort_order
-  tasks.forEach((t,i)=>t.sort_order=i*10);
-  state.tasks=tasks;
-  render();
-  // Persist to Supabase (batch)
-  await Promise.all(tasks.map(t=>sbUpdate("tasks",t.id,{sort_order:t.sort_order})));
-}
-
-async function moveTaskToProject(taskId,newProjId){
-  const task=state.tasks.find(t=>t.id===taskId);
-  if(!task||task.project_id===newProjId)return;
-  await sbUpdate("tasks",taskId,{project_id:newProjId,sort_order:Date.now()});
-  state.tasks=state.tasks.map(t=>t.id===taskId?{...t,project_id:newProjId}:t);
-  setProject(newProjId);
-}
-
-
-// ── Tab drag & drop (reorder projects) ───────────────────────────────────────
-let dragTabSrc=null;
-
-document.addEventListener("dragstart",function(e){
-  const tab=e.target.closest("[data-dragtab]");
-  if(!tab)return;
-  dragTabSrc=Number(tab.dataset.dragtab);
-  setTimeout(()=>tab.classList.add("dragging-tab"),0);
-  e.dataTransfer.effectAllowed="move";
-  e.dataTransfer.setData("text/tab",dragTabSrc);
-  e.stopPropagation();
-},true);
-
-document.addEventListener("dragend",function(e){
-  const tab=e.target.closest("[data-dragtab]");
-  if(tab)tab.classList.remove("dragging-tab");
-  document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
-  dragTabSrc=null;
-},true);
-
-document.addEventListener("dragover",function(e){
-  if(dragTabSrc===null)return;
-  const tab=e.target.closest("[data-dragtab]");
-  if(tab&&Number(tab.dataset.dragtab)!==dragTabSrc){
-    e.preventDefault();
-    document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
-    tab.classList.add("drag-over-tab");
-  }
-},true);
-
-document.addEventListener("drop",function(e){
-  if(dragTabSrc===null)return;
-  const tab=e.target.closest("[data-dragtab]");
-  if(tab&&Number(tab.dataset.dragtab)!==dragTabSrc){
-    e.preventDefault();
-    e.stopPropagation();
-    reorderProjects(dragTabSrc,Number(tab.dataset.dragtab));
-  }
-  document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
-  dragTabSrc=null;
-},true);
-
-async function reorderProjects(srcId,targetId){
-  const projs=[...state.projects];
-  const srcIdx=projs.findIndex(p=>p.id===srcId);
-  const tgtIdx=projs.findIndex(p=>p.id===targetId);
-  if(srcIdx===-1||tgtIdx===-1)return;
-  const[moved]=projs.splice(srcIdx,1);
-  projs.splice(tgtIdx,0,moved);
-  projs.forEach((p,i)=>p.sort_order=i*10);
-  state.projects=projs;
-  render();
-  await Promise.all(projs.map(p=>sbUpdate("projects",p.id,{sort_order:p.sort_order})));
-}
-
 // ── Event delegation ──────────────────────────────────────────────────────────
 document.addEventListener("click",function(e){
   const t=e.target;
 
-  const gotoProj=t.closest("[data-gotoproject]");
-  if(gotoProj){setProject(Number(gotoProj.dataset.gotoproject));setView("tasks");return;}
+  // PIN login
+  const pinBtn=t.closest("[data-pin]");
+  if(pinBtn){
+    const v=pinBtn.dataset.pin;
+    if(v==="⌫"){state.pinInput=state.pinInput.slice(0,-1);}
+    else if(state.pinInput.length<4){state.pinInput+=v;}
+    if(state.pinInput.length===4){
+      if(state.pinInput===state.appPin){state.loggedIn=true;state.readonly=false;state.pinInput="";}
+      else{state.pinError="PIN incorrecto";state.pinInput="";}
+    }
+    render();return;
+  }
+  if(t.closest("[data-action='enterreadonly']")){
+    state.loggedIn=true;state.readonly=true;render();return;
+  }
+  if(t.closest("[data-action='logout']")){state.loggedIn=false;state.pinInput="";state.pinError="";render();return;}
 
   const viewBtn=t.closest("[data-view]");
   if(viewBtn){setView(viewBtn.dataset.view);return;}
@@ -828,21 +1047,36 @@ document.addEventListener("click",function(e){
   if(setPri){setPriority(Number(setPri.dataset.taskid),setPri.dataset.setpriority);return;}
 
   const editT=t.closest("[data-edittask]");
-  if(editT){openEditTask(Number(editT.dataset.edittask));return;}
+  if(editT&&!t.closest("[data-opentask]")){openEditTask(Number(editT.dataset.edittask));return;}
+
+  const editFromDetail=t.closest("[data-editfromdetail]");
+  if(editFromDetail){
+    const tid=Number(editFromDetail.dataset.editfromdetail);
+    state.showDetail=null;setView("tasks");
+    const task=state.tasks.find(x=>x.id===tid);
+    if(task)setProject(task.project_id);
+    openEditTask(tid);return;
+  }
 
   const delT=t.closest("[data-deletetask]");
   if(delT){deleteTask(Number(delT.dataset.deletetask));return;}
 
-  if(t.closest("[data-action='openconfig']")) {openConfig();return;}
-  if(t.closest("[data-action='closeconfig']")){closeConfig();return;}
+  const openTask=t.closest("[data-opentask]");
+  if(openTask){openDetail(Number(openTask.dataset.opentask));return;}
+
+  if(t.closest("[data-action='closedetail']")){state.showDetail=null;render();return;}
+
+  if(t.closest("[data-action='openconfig']")) {state.showConfig=true;render();return;}
+  if(t.closest("[data-action='closeconfig']")){state.showConfig=false;render();return;}
   if(t.closest("[data-action='saveconfig']")) {saveTgConfig();return;}
+  if(t.closest("[data-action='changepin']"))  {changePin();return;}
 
   if(t.closest("[data-action='opentagmgr']")) {state.showTagManager=true;render();return;}
   if(t.closest("[data-action='closetagmgr']")){state.showTagManager=false;render();return;}
   if(t.closest("[data-action='addtag']"))     {addTag();return;}
 
   const delTag=t.closest("[data-deletetag]");
-  if(delTag){deleteTag(Number(delTag.dataset.deletetag));return;}
+  if(delTag){deleteTagItem(Number(delTag.dataset.deletetag));return;}
 
   if(t.closest("[data-action='saveeditproj']"))  {saveEditProj();return;}
   if(t.closest("[data-action='canceleditproj']")){state.showEditProj=null;render();return;}
@@ -855,6 +1089,31 @@ document.addEventListener("click",function(e){
   if(t.closest("[data-action='addtaskconfirm']")){addTask();return;}
   if(t.closest("[data-action='cancelnewtask']")) {state.showTaskForm=false;render();return;}
 
+  if(t.closest("[data-action='calprev']")){
+    state.calMonth--;if(state.calMonth<0){state.calMonth=11;state.calYear--;}render();return;
+  }
+  if(t.closest("[data-action='calnext']")){
+    state.calMonth++;if(state.calMonth>11){state.calMonth=0;state.calYear++;}render();return;
+  }
+  if(t.closest("[data-action='weekprev']")){state.weekOffset--;render();return;}
+  if(t.closest("[data-action='weeknext']")){state.weekOffset++;render();return;}
+
+  // Subtask / comment / attachment
+  const togSub=t.closest("[data-togglesubtask]");
+  if(togSub){toggleSubtask(Number(togSub.dataset.togglesubtask));return;}
+  const delSub=t.closest("[data-deletesubtask]");
+  if(delSub){deleteSubtask(Number(delSub.dataset.deletesubtask));return;}
+  const addSubBtn=t.closest("[data-addsubtask]");
+  if(addSubBtn){addSubtask(Number(addSubBtn.dataset.addsubtask));return;}
+  const addComBtn=t.closest("[data-addcomment]");
+  if(addComBtn){addComment(Number(addComBtn.dataset.addcomment));return;}
+  const delCom=t.closest("[data-deletecomment]");
+  if(delCom){deleteComment(Number(delCom.dataset.deletecomment));return;}
+  const addAttBtn=t.closest("[data-addattachment]");
+  if(addAttBtn){addAttachment(Number(addAttBtn.dataset.addattachment));return;}
+  const delAtt=t.closest("[data-deleteattachment]");
+  if(delAtt){deleteAttachment(Number(delAtt.dataset.deleteattachment));return;}
+
   const colorBtn=t.closest("[data-color]");
   if(colorBtn){
     const target=colorBtn.dataset.target;
@@ -862,7 +1121,6 @@ document.addEventListener("click",function(e){
     if(target==="newproj") {state.newProj.color=colorBtn.dataset.color;render();}
     return;
   }
-
   const formPri=t.closest("[data-formpriority]");
   if(formPri){
     const target=formPri.dataset.target;
@@ -870,8 +1128,14 @@ document.addEventListener("click",function(e){
     if(target==="edittask"){state.editTask.priority=formPri.dataset.formpriority;render();}
     return;
   }
-
-  // Tag toggle in forms
+  const recBtn=t.closest("[data-setrec]");
+  if(recBtn){
+    const v=recBtn.dataset.setrec==="none"?null:recBtn.dataset.setrec;
+    const target=recBtn.dataset.rectarget;
+    if(target==="newtask") {state.newTask.recurrence=v;render();}
+    if(target==="edittask"){state.editTask.recurrence=v;render();}
+    return;
+  }
   const tagToggle=t.closest("[data-tagtoggle]");
   if(tagToggle){
     const tid=Number(tagToggle.dataset.tagtoggle);
@@ -881,41 +1145,143 @@ document.addEventListener("click",function(e){
     if(idx>-1)arr.splice(idx,1);else arr.push(tid);
     render();return;
   }
-
-  // Hotel filter
   const hotelBtn=t.closest("[data-hotelfilter]");
   if(hotelBtn){
     const val=Number(hotelBtn.dataset.hotelfilter);
-    state.hotelFilter=val===0?null:val;
-    render();return;
+    state.hotelFilter=val===0?null:val;render();return;
   }
-
+  const gotoProj=t.closest("[data-gotoproject]");
+  if(gotoProj){setProject(Number(gotoProj.dataset.gotoproject));setView("tasks");return;}
   const toastClose=t.closest("[data-dismisstoast]");
-  if(toastClose){dismissToast(toastClose.dataset.dismisstoast);return;}
+  if(toastClose){state.notifications=state.notifications.filter(n=>String(n.id)!==String(toastClose.dataset.dismisstoast));renderToasts();return;}
 });
+
+// ── Drag & drop tasks ─────────────────────────────────────────────────────────
+let dragSrc=null,dragTabSrc=null;
+document.addEventListener("dragstart",function(e){
+  const card=e.target.closest("[data-dragtask]");
+  if(card){
+    dragSrc=Number(card.dataset.dragtask);
+    setTimeout(()=>card.classList.add("dragging"),0);
+    e.dataTransfer.effectAllowed="move";
+    document.getElementById("drop-hint").classList.add("visible");
+    return;
+  }
+  const tab=e.target.closest("[data-dragtab]");
+  if(tab){
+    dragTabSrc=Number(tab.dataset.dragtab);
+    setTimeout(()=>tab.classList.add("dragging-tab"),0);
+    e.dataTransfer.effectAllowed="move";
+  }
+});
+document.addEventListener("dragend",function(e){
+  document.querySelectorAll(".dragging,.dragging-tab,.drag-over,.drag-over-tab,.drop-target").forEach(el=>{
+    el.classList.remove("dragging","dragging-tab","drag-over","drag-over-tab","drop-target");
+  });
+  document.getElementById("drop-hint").classList.remove("visible");
+  dragSrc=null;dragTabSrc=null;
+});
+document.addEventListener("dragover",function(e){
+  e.preventDefault();
+  if(dragSrc!==null){
+    const card=e.target.closest("[data-dragtask]");
+    if(card&&Number(card.dataset.dragtask)!==dragSrc){
+      document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
+      card.classList.add("drag-over");
+    }
+    const tab=e.target.closest("[data-project]");
+    if(tab){
+      document.querySelectorAll(".drop-target").forEach(el=>el.classList.remove("drop-target"));
+      tab.classList.add("drop-target");
+    }
+  }
+  if(dragTabSrc!==null){
+    const tab=e.target.closest("[data-dragtab]");
+    if(tab&&Number(tab.dataset.dragtab)!==dragTabSrc){
+      document.querySelectorAll(".drag-over-tab").forEach(el=>el.classList.remove("drag-over-tab"));
+      tab.classList.add("drag-over-tab");
+    }
+  }
+});
+document.addEventListener("drop",function(e){
+  e.preventDefault();
+  if(dragSrc!==null){
+    const card=e.target.closest("[data-dragtask]");
+    const tab=e.target.closest("[data-project]");
+    if(card&&Number(card.dataset.dragtask)!==dragSrc) reorderTasks(dragSrc,Number(card.dataset.dragtask));
+    else if(tab) moveTaskToProject(dragSrc,Number(tab.dataset.project));
+  }
+  if(dragTabSrc!==null){
+    const tab=e.target.closest("[data-dragtab]");
+    if(tab&&Number(tab.dataset.dragtab)!==dragTabSrc) reorderProjects(dragTabSrc,Number(tab.dataset.dragtab));
+  }
+  document.querySelectorAll(".drag-over,.drag-over-tab,.drop-target").forEach(el=>{
+    el.classList.remove("drag-over","drag-over-tab","drop-target");
+  });
+  document.getElementById("drop-hint").classList.remove("visible");
+  dragSrc=null;dragTabSrc=null;
+});
+
+async function reorderTasks(srcId,targetId){
+  const tasks=[...state.tasks];
+  const si=tasks.findIndex(t=>t.id===srcId),ti=tasks.findIndex(t=>t.id===targetId);
+  if(si===-1||ti===-1)return;
+  const[m]=tasks.splice(si,1);tasks.splice(ti,0,m);
+  tasks.forEach((t,i)=>t.sort_order=i*10);
+  state.tasks=tasks;render();
+  await Promise.all(tasks.map(t=>sbUpdate("tasks",t.id,{sort_order:t.sort_order})));
+}
+async function moveTaskToProject(taskId,newProjId){
+  const task=state.tasks.find(t=>t.id===taskId);
+  if(!task||task.project_id===newProjId)return;
+  await sbUpdate("tasks",taskId,{project_id:newProjId});
+  state.tasks=state.tasks.map(t=>t.id===taskId?{...t,project_id:newProjId}:t);
+  setProject(newProjId);
+}
+async function reorderProjects(srcId,targetId){
+  const projs=[...state.projects];
+  const si=projs.findIndex(p=>p.id===srcId),ti=projs.findIndex(p=>p.id===targetId);
+  if(si===-1||ti===-1)return;
+  const[m]=projs.splice(si,1);projs.splice(ti,0,m);
+  projs.forEach((p,i)=>p.sort_order=i*10);
+  state.projects=projs;render();
+  await Promise.all(projs.map(p=>sbUpdate("projects",p.id,{sort_order:p.sort_order})));
+}
 
 // ── State helpers ─────────────────────────────────────────────────────────────
 function setView(v){state.view=v;state.showTaskForm=false;state.showEditTask=null;render();}
 function setProject(id){state.activeProject=id;state.taskFilter="pending";state.showTaskForm=false;state.showEditTask=null;render();}
 function toggleNewProj(){state.showProjForm=!state.showProjForm;state.showEditProj=null;render();}
 function setFilter(f){state.taskFilter=f;render();}
-function openTaskForm(){state.showTaskForm=true;state.newTask={title:"",priority:"medium",notes:"",deadline:"",tagIds:[]};render();}
-function openConfig(){state.showConfig=true;render();}
-function closeConfig(){state.showConfig=false;render();}
-function dismissToast(id){state.notifications=state.notifications.filter(n=>String(n.id)!==String(id));renderToasts();}
+function openTaskForm(){state.showTaskForm=true;state.newTask={title:"",priority:"medium",notes:"",deadline:"",tagIds:[],recurrence:null};render();}
 function togglePDD(id){const el=document.getElementById(`pdd-${id}`);if(el)el.style.display=el.style.display==="none"||!el.style.display?"block":"none";}
 function openEditProj(id){const p=proj(id);state.showEditProj=id;state.editProj={name:p.name,color:p.color};state.showProjForm=false;render();}
 function openEditTask(id){
   const t=state.tasks.find(x=>x.id===id);
   state.showEditTask=id;
-  state.editTask={title:t.title,priority:t.priority,notes:t.notes||"",deadline:t.deadline||"",tagIds:[...(state.taskTags[id]||[])]};
+  state.editTask={title:t.title,priority:t.priority,notes:t.notes||"",deadline:t.deadline||"",tagIds:[...(state.taskTags[id]||[])],recurrence:t.recurrence||null};
+  render();
+}
+async function openDetail(id){
+  state.showDetail=id;
+  // Load subtasks, comments, attachments if not cached
+  if(!state.subtasks[id]){
+    const[subs,comms,atts]=await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/subtasks?task_id=eq.${id}&order=sort_order.asc`,{headers:hdrs}).then(r=>r.json()),
+      fetch(`${SUPABASE_URL}/rest/v1/comments?task_id=eq.${id}&order=created_at.asc`,{headers:hdrs}).then(r=>r.json()),
+      fetch(`${SUPABASE_URL}/rest/v1/attachments?task_id=eq.${id}&order=id.asc`,{headers:hdrs}).then(r=>r.json()),
+    ]);
+    state.subtasks[id]=Array.isArray(subs)?subs:[];
+    state.comments[id]=Array.isArray(comms)?comms:[];
+    state.attachments[id]=Array.isArray(atts)?atts:[];
+  }
   render();
 }
 
 // ── DB actions ────────────────────────────────────────────────────────────────
 async function addProject(){
   const{name,color}=state.newProj;if(!name.trim())return;
-  const data=await sbInsert("projects",{name:name.trim(),color});
+  const data=await sbInsert("projects",{name:name.trim(),color,sort_order:state.projects.length*10});
   state.projects.push(data);state.activeProject=data.id;
   state.newProj={name:"",color:PROJECT_COLORS[0]};state.showProjForm=false;render();
 }
@@ -934,25 +1300,40 @@ async function saveEditProj(){
 }
 async function addTask(){
   const{newTask,activeProject}=state;if(!newTask.title.trim())return;
-  const data=await sbInsert("tasks",{project_id:activeProject,title:newTask.title.trim(),notes:newTask.notes.trim(),priority:newTask.priority,deadline:newTask.deadline||null,done:false});
+  const maxOrder=Math.max(0,...state.tasks.filter(t=>t.project_id===activeProject).map(t=>t.sort_order||0));
+  const data=await sbInsert("tasks",{project_id:activeProject,title:newTask.title.trim(),notes:newTask.notes.trim(),priority:newTask.priority,deadline:newTask.deadline||null,done:false,recurrence:newTask.recurrence||null,sort_order:maxOrder+10});
   state.tasks.push(data);
-  // Save tags
   state.taskTags[data.id]=newTask.tagIds;
-  if(newTask.tagIds.length>0){
-    await sbInsertMany("task_tags",newTask.tagIds.map(tid=>({task_id:data.id,tag_id:tid})));
-  }
-  state.newTask={title:"",priority:"medium",notes:"",deadline:"",tagIds:[]};
+  if(newTask.tagIds.length>0) await sbInsertMany("task_tags",newTask.tagIds.map(tid=>({task_id:data.id,tag_id:tid})));
+  state.newTask={title:"",priority:"medium",notes:"",deadline:"",tagIds:[],recurrence:null};
   state.showTaskForm=false;render();
 }
 async function toggleDone(id){
   const t=state.tasks.find(x=>x.id===id);
-  await sbUpdate("tasks",id,{done:!t.done});
-  state.tasks=state.tasks.map(x=>x.id===id?{...x,done:!x.done}:x);render();
+  const newDone=!t.done;
+  await sbUpdate("tasks",id,{done:newDone});
+  state.tasks=state.tasks.map(x=>x.id===id?{...x,done:newDone}:x);
+  // Handle recurrence: if completing a recurring task, create next occurrence
+  if(newDone&&t.recurrence&&t.deadline){
+    const next=new Date(t.deadline+"T12:00:00");
+    if(t.recurrence==="daily")   next.setDate(next.getDate()+1);
+    if(t.recurrence==="weekly")  next.setDate(next.getDate()+7);
+    if(t.recurrence==="monthly") next.setMonth(next.getMonth()+1);
+    if(t.recurrence==="yearly")  next.setFullYear(next.getFullYear()+1);
+    const nextIso=next.toISOString().split("T")[0];
+    const newTask=await sbInsert("tasks",{project_id:t.project_id,title:t.title,notes:t.notes,priority:t.priority,deadline:nextIso,done:false,recurrence:t.recurrence,sort_order:(t.sort_order||0)+1});
+    state.tasks.push(newTask);
+    const tids=state.taskTags[id]||[];
+    state.taskTags[newTask.id]=[...tids];
+    if(tids.length>0) await sbInsertMany("task_tags",tids.map(tid=>({task_id:newTask.id,tag_id:tid})));
+  }
+  render();
 }
 async function deleteTask(id){
   await sbDelete("tasks",id);
   state.tasks=state.tasks.filter(t=>t.id!==id);
-  delete state.taskTags[id];render();
+  delete state.taskTags[id];delete state.subtasks[id];delete state.comments[id];delete state.attachments[id];
+  render();
 }
 async function setPriority(id,priority){
   await sbUpdate("tasks",id,{priority});
@@ -960,58 +1341,121 @@ async function setPriority(id,priority){
 }
 async function saveEditTask(){
   const{showEditTask,editTask}=state;if(!editTask.title.trim())return;
-  await sbUpdate("tasks",showEditTask,{title:editTask.title.trim(),priority:editTask.priority,notes:editTask.notes.trim(),deadline:editTask.deadline||null});
-  // Update tags
+  await sbUpdate("tasks",showEditTask,{title:editTask.title.trim(),priority:editTask.priority,notes:editTask.notes.trim(),deadline:editTask.deadline||null,recurrence:editTask.recurrence||null});
   await sbDeleteWhere("task_tags","task_id",showEditTask);
-  if(editTask.tagIds.length>0){
-    await sbInsertMany("task_tags",editTask.tagIds.map(tid=>({task_id:showEditTask,tag_id:tid})));
-  }
-  state.tasks=state.tasks.map(t=>t.id===showEditTask?{...t,...editTask,deadline:editTask.deadline||null}:t);
+  if(editTask.tagIds.length>0) await sbInsertMany("task_tags",editTask.tagIds.map(tid=>({task_id:showEditTask,tag_id:tid})));
+  state.tasks=state.tasks.map(t=>t.id===showEditTask?{...t,...editTask,deadline:editTask.deadline||null,recurrence:editTask.recurrence||null}:t);
   state.taskTags[showEditTask]=[...editTask.tagIds];
   state.showEditTask=null;render();
 }
+
+// Subtasks
+async function addSubtask(taskId){
+  if(!state.newSubtask.trim())return;
+  const data=await sbInsert("subtasks",{task_id:taskId,title:state.newSubtask.trim(),done:false,sort_order:(state.subtasks[taskId]||[]).length*10});
+  if(!state.subtasks[taskId])state.subtasks[taskId]=[];
+  state.subtasks[taskId].push(data);
+  state.newSubtask="";render();
+}
+async function toggleSubtask(id){
+  let found;
+  Object.values(state.subtasks).forEach(arr=>arr.forEach(s=>{if(s.id===id)found=s;}));
+  if(!found)return;
+  await sbUpdate("subtasks",id,{done:!found.done});
+  Object.keys(state.subtasks).forEach(tid=>{
+    state.subtasks[tid]=state.subtasks[tid].map(s=>s.id===id?{...s,done:!s.done}:s);
+  });render();
+}
+async function deleteSubtask(id){
+  await sbDelete("subtasks",id);
+  Object.keys(state.subtasks).forEach(tid=>{
+    state.subtasks[tid]=state.subtasks[tid].filter(s=>s.id!==id);
+  });render();
+}
+
+// Comments
+async function addComment(taskId){
+  if(!state.newComment.trim())return;
+  const data=await sbInsert("comments",{task_id:taskId,text:state.newComment.trim()});
+  if(!state.comments[taskId])state.comments[taskId]=[];
+  state.comments[taskId].push(data);
+  state.newComment="";render();
+}
+async function deleteComment(id){
+  await sbDelete("comments",id);
+  Object.keys(state.comments).forEach(tid=>{
+    state.comments[tid]=state.comments[tid].filter(c=>c.id!==id);
+  });render();
+}
+
+// Attachments
+async function addAttachment(taskId){
+  if(!state.newAttachUrl.trim())return;
+  const data=await sbInsert("attachments",{task_id:taskId,label:state.newAttachLabel.trim()||state.newAttachUrl.trim(),url:state.newAttachUrl.trim()});
+  if(!state.attachments[taskId])state.attachments[taskId]=[];
+  state.attachments[taskId].push(data);
+  state.newAttachLabel="";state.newAttachUrl="";render();
+}
+async function deleteAttachment(id){
+  await sbDelete("attachments",id);
+  Object.keys(state.attachments).forEach(tid=>{
+    state.attachments[tid]=state.attachments[tid].filter(a=>a.id!==id);
+  });render();
+}
+
+// Tags
 async function addTag(){
   const name=state.newTagName.trim();if(!name)return;
   const data=await sbInsert("tags",{name});
   state.tags.push(data);state.newTagName="";render();
 }
-async function deleteTag(id){
+async function deleteTagItem(id){
   if(!confirm("¿Eliminar este tag?"))return;
   await sbDelete("tags",id);
   state.tags=state.tags.filter(t=>t.id!==id);
-  // Remove from local taskTags
-  Object.keys(state.taskTags).forEach(tid=>{
-    state.taskTags[tid]=state.taskTags[tid].filter(x=>x!==id);
-  });
-  if(state.hotelFilter===id)state.hotelFilter=null;
-  render();
+  Object.keys(state.taskTags).forEach(tid=>{state.taskTags[tid]=state.taskTags[tid].filter(x=>x!==id);});
+  if(state.hotelFilter===id)state.hotelFilter=null;render();
 }
+
+// Config
 async function saveTgConfig(){
   localStorage.setItem("tg-token",state.tgToken);
   localStorage.setItem("tg-chatid",state.tgChatId);
   state.showConfig=false;
-  await sendTelegram("✅ ¡Notificaciones de tareas configuradas correctamente!");
+  await sendTelegram("✅ ¡Notificaciones configuradas correctamente!");
   render();
+}
+async function changePin(){
+  const cur=document.getElementById("cur-pin")?.value;
+  const nw=document.getElementById("new-pin")?.value;
+  if(cur!==state.appPin){alert("PIN actual incorrecto");return;}
+  if(!nw||nw.length!==4||!/^\d+$/.test(nw)){alert("El nuevo PIN debe tener 4 dígitos");return;}
+  await sbUpdate("app_config","pin",{value:nw}).catch(()=>{});
+  state.appPin=nw;
+  alert("PIN actualizado correctamente");
+  state.showConfig=false;render();
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (async()=>{
   try{
-    const[{data:projs},{data:tsks},{data:tgs},{data:ttags}]=await Promise.all([
-      sbGet("projects").then(d=>({data:d})),
-      sbGet("tasks").then(d=>({data:d})),
-      sbGet("tags").then(d=>({data:d})),
-      fetch(`${SUPABASE_URL}/rest/v1/task_tags?select=task_id,tag_id`,{headers}).then(r=>r.json()).then(d=>({data:Array.isArray(d)?d:[]})),
+    const[projs,tsks,tgs,ttags,cfg]=await Promise.all([
+      sbGet("projects"),sbGet("tasks"),sbGet("tags"),
+      fetch(`${SUPABASE_URL}/rest/v1/task_tags?select=task_id,tag_id`,{headers:hdrs}).then(r=>r.json()),
+      sbGet("app_config"),
     ]);
     state.projects=(Array.isArray(projs)?projs:[]).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
     state.tasks=(Array.isArray(tsks)?tsks:[]).sort((a,b)=>(a.sort_order||a.id)-(b.sort_order||b.id));
     state.tags=Array.isArray(tgs)?tgs:[];
-    const safeTtags=Array.isArray(ttags)?ttags:[];
-    safeTtags.forEach(({task_id,tag_id})=>{
+    (Array.isArray(ttags)?ttags:[]).forEach(({task_id,tag_id})=>{
       if(!state.taskTags[task_id])state.taskTags[task_id]=[];
       state.taskTags[task_id].push(tag_id);
     });
-    state.activeProject=projs?.[0]?.id||null;
+    (Array.isArray(cfg)?cfg:[]).forEach(({key,value})=>{
+      if(key==="pin")state.appPin=value;
+      if(key==="readonly_token")state.readonlyToken=value;
+    });
+    state.activeProject=state.projects[0]?.id||null;
     render();checkDeadlines();
   }catch(e){
     document.getElementById("app").innerHTML=`<div class="loading" style="color:#E53E3E"><div style="font-size:32px">⚠️</div><p>Error al conectar con Supabase</p><p style="font-size:12px;color:#718096">${e.message}</p></div>`;
