@@ -262,10 +262,10 @@ let state={
   showTaskForm:false, showProjForm:false, showEditProj:null,
   showEditTask:null, showConfig:false, showTagManager:false,
   showDetail:null,
-  newTask:{title:"",priority:"medium",notes:"",deadline:"",tagIds:[],recurrence:null},
+  newTask:{title:"",priority:"medium",notes:"",deadline:"",due_time:"",tagIds:[],recurrence:null},
   newProj:{name:"",color:PROJECT_COLORS[0]},
   editProj:{name:"",color:PROJECT_COLORS[0]},
-  editTask:{title:"",priority:"medium",notes:"",deadline:"",tagIds:[],recurrence:null},
+  editTask:{title:"",priority:"medium",notes:"",deadline:"",due_time:"",tagIds:[],recurrence:null},
   newTagName:"", newSubtask:"", newComment:"",
   newAttachLabel:"", newAttachUrl:"",
   tgToken:localStorage.getItem("tg-token")||"",
@@ -305,8 +305,9 @@ function checkDeadlines(){
         state.shownNotifs.add(key);
         const p=proj(t.project_id);
         const label=d<0?"¡Tarea vencida!":d===0?"¡Vence hoy!":"¡Vence mañana!";
+        const timeStr=t.due_time?` a las ${t.due_time}`:"";
         state.notifications.push({id:Date.now()+Math.random(),taskTitle:t.title,project:p?.name||"",label,color:d<=0?"#E53E3E":"#DD6B20"});
-        sendTelegram(`⏰ ${label}\n📌 ${t.title}\n📁 ${p?.name||""}`);
+        sendTelegram(`⏰ ${label}${timeStr}\n📌 ${t.title}\n📁 ${p?.name||""}`);
       }
     }
   });
@@ -761,7 +762,7 @@ function taskDetailModal(){
 
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
         <span class="priority-badge" style="background:${pr.bg};color:${pr.color};border-color:${pr.border}">${pr.emoji} ${pr.label}</span>
-        ${dl?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${fmtDate(t.deadline)}</span>`:""}
+        ${dl?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${fmtDate(t.deadline)}${t.due_time?" "+t.due_time:""}</span>`:""}
         ${t.recurrence?`<span class="rec-badge">🔄 ${RECURRENCE.find(r=>r.id===t.recurrence)?.label||t.recurrence}</span>`:""}
         ${tids.map(tg=>`<span class="tag-pill">${tg.name}</span>`).join("")}
       </div>
@@ -804,10 +805,20 @@ function taskDetailModal(){
           <a class="attachment-link" href="${a.url}" target="_blank">${a.label||a.url}</a>
           ${!state.readonly?`<button style="background:none;border:none;color:#CBD5E0;font-size:14px;cursor:pointer" data-deleteattachment="${a.id}">×</button>`:""}
         </div>`).join("")}
-      ${!state.readonly?`<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-        <input class="input-sm" style="flex:1;min-width:100px" placeholder="Etiqueta" value="${state.newAttachLabel}" oninput="state.newAttachLabel=this.value">
-        <input class="input-sm" style="flex:2;min-width:140px" placeholder="URL (https://…)" value="${state.newAttachUrl}" oninput="state.newAttachUrl=this.value" onkeydown="if(event.key==='Enter')addAttachment(${tid})">
-        <button class="btn-sm btn-primary" style="background:#276749" data-addattachment="${tid}">+</button>
+      ${!state.readonly?`
+      <div style="margin-top:8px">
+        <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+          <input class="input-sm" style="flex:1;min-width:100px" placeholder="Etiqueta" value="${state.newAttachLabel}" oninput="state.newAttachLabel=this.value">
+          <input class="input-sm" style="flex:2;min-width:140px" placeholder="URL (https://…)" value="${state.newAttachUrl}" oninput="state.newAttachUrl=this.value" onkeydown="if(event.key==='Enter')addAttachment(${tid})">
+          <button class="btn-sm btn-primary" style="background:#276749" data-addattachment="${tid}">+ URL</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:#F0FFF4;border:1.5px solid #9AE6B4;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:#276749">
+            📎 Subir archivo
+            <input type="file" style="display:none" onchange="uploadFile(event,${tid})">
+          </label>
+          <span id="upload-status-${tid}" style="font-size:11px;color:#718096"></span>
+        </div>
       </div>`:""}
 
       <div style="margin-top:18px;display:flex;gap:8px">
@@ -839,7 +850,7 @@ function taskCard(t){
             ${PRIORITIES.map(p=>`<button class="priority-option" style="background:${p.id===t.priority?p.bg:"transparent"};color:${p.color}" data-setpriority="${p.id}" data-taskid="${t.id}">${p.emoji} ${p.label}</button>`).join("")}
           </div>
         </div>`:""}
-        ${dl&&!t.done?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${dl.text}</span>`:""}
+        ${dl&&!t.done?`<span class="deadline-badge" style="background:${dl.urgent?"#FFF5F5":"#F7FAFC"};color:${dl.color};border-color:${dl.urgent?"#FEB2B2":"#E2E8F0"}">📅 ${dl.text}${t.due_time?" "+t.due_time:""}</span>`:""}
         ${t.recurrence?`<span class="rec-badge">🔄 ${RECURRENCE.find(r=>r.id===t.recurrence)?.label||""}</span>`:""}
         ${subs.length>0?`<span style="font-size:11px;color:#718096">☑ ${doneSubs}/${subs.length}</span>`:""}
       </div>
@@ -879,9 +890,10 @@ function editTaskCard(t){
     <div style="font-size:12px;font-weight:700;color:${ap?.color};text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">✏️ Editando tarea</div>
     <input class="input" value="${(editTask.title||"").replace(/"/g,'&quot;')}" oninput="state.editTask.title=this.value" onkeydown="if(event.key==='Enter')saveEditTask()">
     <textarea class="textarea" placeholder="Notas (opcional)" oninput="state.editTask.notes=this.value">${editTask.notes||""}</textarea>
-    <label class="label">📅 Fecha límite</label>
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+    <label class="label">📅 Fecha y hora límite</label>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
       <input type="date" class="input-sm" value="${editTask.deadline||""}" oninput="state.editTask.deadline=this.value">
+      <input type="time" class="input-sm" value="${editTask.due_time||""}" oninput="state.editTask.due_time=this.value" placeholder="HH:MM">
       ${editTask.deadline?`<button style="font-size:11px;color:#FC8181;background:none;border:1px solid #FED7D7;border-radius:6px;padding:4px 8px" data-action="cleardeadline">Quitar</button>`:""}
     </div>
     <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${editTask.priority===p.id?p.color:p.border};background:${editTask.priority===p.id?p.bg:"transparent"};color:${p.color}" data-formpriority="${p.id}" data-target="edittask">${p.emoji} ${p.label}</button>`).join("")}</div>
@@ -901,8 +913,11 @@ function newTaskForm(ap){
     <div style="font-weight:700;color:${ap?.color};font-size:14px;margin-bottom:14px">Nueva tarea — ${ap?.name||""}</div>
     <input class="input" placeholder="¿Qué hay que hacer?" value="${(newTask.title||"").replace(/"/g,'&quot;')}" oninput="state.newTask.title=this.value" onkeydown="if(event.key==='Enter')addTask()">
     <textarea class="textarea" placeholder="Notas (opcional)" oninput="state.newTask.notes=this.value">${newTask.notes||""}</textarea>
-    <label class="label">📅 Fecha límite</label>
-    <input type="date" class="input-sm" value="${newTask.deadline||""}" oninput="state.newTask.deadline=this.value" style="margin-bottom:12px">
+    <label class="label">📅 Fecha y hora límite</label>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <input type="date" class="input-sm" value="${newTask.deadline||""}" oninput="state.newTask.deadline=this.value">
+      <input type="time" class="input-sm" value="${newTask.due_time||""}" oninput="state.newTask.due_time=this.value" placeholder="HH:MM">
+    </div>
     <div class="priority-row">${PRIORITIES.map(p=>`<button class="priority-btn" style="border-color:${newTask.priority===p.id?p.color:p.border};background:${newTask.priority===p.id?p.bg:"transparent"};color:${p.color}" data-formpriority="${p.id}" data-target="newtask">${p.emoji} ${p.label}</button>`).join("")}</div>
     ${recurrenceSelector(newTask.recurrence,"newtask")}
     ${tagSelector(newTask.tagIds||[],"newtask")}
@@ -1259,7 +1274,7 @@ function openEditProj(id){const p=proj(id);state.showEditProj=id;state.editProj=
 function openEditTask(id){
   const t=state.tasks.find(x=>x.id===id);
   state.showEditTask=id;
-  state.editTask={title:t.title,priority:t.priority,notes:t.notes||"",deadline:t.deadline||"",tagIds:[...(state.taskTags[id]||[])],recurrence:t.recurrence||null};
+  state.editTask={title:t.title,priority:t.priority,notes:t.notes||"",deadline:t.deadline||"",due_time:t.due_time||"",tagIds:[...(state.taskTags[id]||[])],recurrence:t.recurrence||null};
   render();
 }
 async function openDetail(id){
@@ -1301,7 +1316,7 @@ async function saveEditProj(){
 async function addTask(){
   const{newTask,activeProject}=state;if(!newTask.title.trim())return;
   const maxOrder=Math.max(0,...state.tasks.filter(t=>t.project_id===activeProject).map(t=>t.sort_order||0));
-  const data=await sbInsert("tasks",{project_id:activeProject,title:newTask.title.trim(),notes:newTask.notes.trim(),priority:newTask.priority,deadline:newTask.deadline||null,done:false,recurrence:newTask.recurrence||null,sort_order:maxOrder+10});
+  const data=await sbInsert("tasks",{project_id:activeProject,title:newTask.title.trim(),notes:newTask.notes.trim(),priority:newTask.priority,deadline:newTask.deadline||null,due_time:newTask.due_time||null,done:false,recurrence:newTask.recurrence||null,sort_order:maxOrder+10});
   state.tasks.push(data);
   state.taskTags[data.id]=newTask.tagIds;
   if(newTask.tagIds.length>0) await sbInsertMany("task_tags",newTask.tagIds.map(tid=>({task_id:data.id,tag_id:tid})));
@@ -1341,10 +1356,10 @@ async function setPriority(id,priority){
 }
 async function saveEditTask(){
   const{showEditTask,editTask}=state;if(!editTask.title.trim())return;
-  await sbUpdate("tasks",showEditTask,{title:editTask.title.trim(),priority:editTask.priority,notes:editTask.notes.trim(),deadline:editTask.deadline||null,recurrence:editTask.recurrence||null});
+  await sbUpdate("tasks",showEditTask,{title:editTask.title.trim(),priority:editTask.priority,notes:editTask.notes.trim(),deadline:editTask.deadline||null,due_time:editTask.due_time||null,recurrence:editTask.recurrence||null});
   await sbDeleteWhere("task_tags","task_id",showEditTask);
   if(editTask.tagIds.length>0) await sbInsertMany("task_tags",editTask.tagIds.map(tid=>({task_id:showEditTask,tag_id:tid})));
-  state.tasks=state.tasks.map(t=>t.id===showEditTask?{...t,...editTask,deadline:editTask.deadline||null,recurrence:editTask.recurrence||null}:t);
+  state.tasks=state.tasks.map(t=>t.id===showEditTask?{...t,...editTask,deadline:editTask.deadline||null,due_time:editTask.due_time||null,recurrence:editTask.recurrence||null}:t);
   state.taskTags[showEditTask]=[...editTask.tagIds];
   state.showEditTask=null;render();
 }
@@ -1435,6 +1450,48 @@ async function changePin(){
   localStorage.setItem("app-pin",nw);
   alert("PIN actualizado correctamente");
   state.showConfig=false;render();
+}
+
+
+// ── File upload ───────────────────────────────────────────────────────────────
+async function uploadFile(event, taskId) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById(`upload-status-${taskId}`);
+  if (statusEl) statusEl.textContent = "Subiendo…";
+
+  const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const uploadUrl = `${SUPABASE_URL}/storage/v1/object/attachments/${fileName}`;
+
+  try {
+    const res = await fetch(uploadUrl, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": file.type || "application/octet-stream",
+        "x-upsert": "true",
+      },
+      body: file,
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/attachments/${fileName}`;
+    const data = await sbInsert("attachments", {
+      task_id: taskId,
+      label: file.name,
+      url: publicUrl,
+    });
+
+    if (!state.attachments[taskId]) state.attachments[taskId] = [];
+    state.attachments[taskId].push(data);
+    if (statusEl) statusEl.textContent = "✅ Subido";
+    setTimeout(() => { if (statusEl) statusEl.textContent = ""; }, 2000);
+    render();
+  } catch (err) {
+    if (statusEl) statusEl.textContent = "❌ Error: " + err.message;
+  }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
